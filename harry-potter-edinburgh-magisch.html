@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Het Edinburgh van Harry Potter — tovereditie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f2e8d3;--paper-d:#e7d9ba;--paper-l:#faf3e4;
+  --ink:#231a11;--ink-soft:#54432f;--ink-faint:#8a755a;
+  --gold:#a87f2c;--gold-lt:#d8b258;--gold-pale:#e8d3a0;--gold-deep:#6d4f16;
+  --ox:#7c1f27;--teal:#155450;--indigo:#2b3a6b;--plum:#5b2a53;
+  --rule:rgba(168,127,44,.42);
+  --shadow:0 18px 40px rgba(60,40,15,.18);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font-family:"EB Garamond",Georgia,serif;
+  font-size:19px;line-height:1.7;background:var(--paper);overflow-x:hidden;
+  -webkit-font-smoothing:antialiased}
+
+/* ---------- fixed scenery: wallpaper + damask, parallax ---------- */
+.sky{position:fixed;inset:-10% 0;z-index:-5;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, #fbf4e4 0%, transparent 60%),
+    radial-gradient(ellipse 70% 60% at 100% 30%, #efe0c0 0%, transparent 60%),
+    radial-gradient(ellipse 80% 60% at 0% 80%, #ecdcbb 0%, transparent 60%),
+    linear-gradient(180deg,#f6ecd8 0%, #f0e5cf 50%, #e9dcc0 100%);
+  will-change:transform}
+/* damask wallpaper layer (pattern injected by JS) */
+.stars{position:fixed;inset:-20% 0;z-index:-4;will-change:transform;opacity:.5;
+  background-repeat:repeat;animation:none}
+/* paper grain */
+.stars::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(rgba(120,90,40,.06) 1px, transparent 1px);
+  background-size:3px 3px}
+.horizon{position:fixed;left:0;bottom:0;height:130px;width:100%;z-index:-3;pointer-events:none;overflow:hidden}
+.horizon .band{position:absolute;bottom:0;left:0;height:130px;width:300%;
+  background-repeat:repeat-x;background-size:auto 130px;will-change:transform}
+.horizon{-webkit-mask-image:linear-gradient(180deg,transparent,#000 70%);mask-image:linear-gradient(180deg,transparent,#000 70%)}
+.horizon .far{opacity:.10}
+.horizon .near{opacity:.16}
+.candles{display:none}
+
+#owl{position:fixed;top:16%;left:-90px;width:66px;z-index:-1;opacity:0;pointer-events:none}
+#owl .wing{transform-origin:32px 20px;animation:flap .42s ease-in-out infinite alternate}
+@keyframes flap{from{transform:rotate(-24deg) scaleY(1)}to{transform:rotate(16deg) scaleY(.82)}}
+
+@media (prefers-reduced-motion:reduce){
+  #owl .wing,.lit,.plate img{animation:none!important}
+  #owl{display:none}
+  .plate img{transform:none!important}
+}
+
+/* ---------- sticky chapter bar ---------- */
+#topbar{position:fixed;top:0;left:0;right:0;z-index:40;
+  background:linear-gradient(180deg, rgba(246,237,217,.97), rgba(246,237,217,.86));
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);
+  box-shadow:0 2px 18px rgba(90,65,25,.10);
+  transform:translateY(-100%);transition:transform .4s cubic-bezier(.2,.7,.3,1)}
+#topbar.show{transform:none}
+#topbar .inner{max-width:960px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:14px}
+#topbar .now{font-family:"Cinzel",serif;font-size:.74rem;letter-spacing:.16em;color:var(--gold-deep);
+  text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#topbar .up{margin-left:auto;font-family:"Cinzel",serif;font-size:.66rem;letter-spacing:.12em;
+  color:var(--ink-soft);background:none;border:1px solid var(--rule);border-radius:0;
+  padding:6px 14px;cursor:pointer;transition:all .25s}
+#topbar .up:hover{color:#fff;background:var(--ox);border-color:var(--ox)}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:45;
+  background:linear-gradient(90deg,#6d4f16,#a87f2c,#e8d3a0);box-shadow:0 0 10px rgba(168,127,44,.5)}
+
+/* ---------- scroll-spy ---------- */
+#spy{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:35;
+  display:flex;flex-direction:column;gap:10px;opacity:0;transition:opacity .4s}
+#spy.show{opacity:1}
+#spy a{width:30px;height:30px;display:grid;place-items:center;
+  font-family:"Cinzel",serif;font-size:.6rem;color:var(--ink-faint);text-decoration:none;
+  border:1px solid var(--rule);background:rgba(250,243,228,.7);
+  transition:all .3s;position:relative}
+#spy a::before,#spy a::after{content:"";position:absolute;left:3px;right:3px;height:1px;
+  background:var(--rule);opacity:0;transition:opacity .3s}
+#spy a::before{top:3px}#spy a::after{bottom:3px}
+#spy a:hover{color:var(--ox);border-color:var(--gold)}
+#spy a.active{color:var(--paper-l);background:linear-gradient(180deg,#b98f34,#8a6620);
+  border-color:var(--gold-deep);box-shadow:0 0 0 3px rgba(168,127,44,.16);transform:scale(1.12)}
+#spy a.active::before,#spy a.active::after{opacity:.7;background:rgba(255,240,205,.8)}
+@media (max-width:900px){#spy{display:none}}
+
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 150px}
+
+/* ---------- hero ---------- */
+header.hero{position:relative;text-align:center;padding:70px 20px 30px;max-width:1000px;margin:0 auto;
+  will-change:transform,opacity}
+.sigil{width:104px;height:104px;margin:0 auto 20px;display:block;
+  filter:drop-shadow(0 6px 10px rgba(90,65,25,.28))}
+h1{font-family:"Cinzel Decorative",serif;font-weight:900;
+  font-size:clamp(36px,7.6vw,74px);line-height:1.05;margin:0 0 20px;letter-spacing:.01em;
+  background:linear-gradient(100deg,#3a280b 0%,#5f4413 26%,#a2792a 43%,#e6cf90 50%,#a2792a 57%,#5f4413 74%,#3a280b 100%);
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shimmer 11s linear infinite;
+  text-shadow:0 1px 0 rgba(255,255,255,.5)}
+@keyframes shimmer{from{background-position:0% 0}to{background-position:250% 0}}
+.hero .sub{max-width:47ch;margin:0 auto;color:var(--ink-soft);font-size:1.1rem;font-style:italic}
+.hero .meta{margin-top:26px;font-family:"Cinzel",serif;font-size:.7rem;letter-spacing:.24em;color:var(--gold-deep)}
+.deco-line{display:flex;align-items:center;justify-content:center;gap:14px;margin:22px auto 0;max-width:460px}
+.deco-line span{height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.deco-line svg{width:22px;height:22px;fill:var(--gold);flex:none}
+.scrollcue{margin:34px auto 0;width:22px;height:36px;border:1px solid var(--rule);border-radius:12px;position:relative}
+.scrollcue::after{content:"";position:absolute;left:50%;top:7px;width:3px;height:7px;margin-left:-1.5px;
+  border-radius:2px;background:var(--gold);animation:cue 1.9s ease-in-out infinite}
+@keyframes cue{0%{transform:translateY(0);opacity:1}70%{transform:translateY(14px);opacity:0}100%{opacity:0}}
+
+/* ---------- photographic plates ---------- */
+.plate{margin:0 0 20px;position:relative;background:var(--paper-l);
+  padding:12px;border:1px solid var(--rule);
+  box-shadow:var(--shadow), inset 0 0 0 1px rgba(255,255,255,.6);
+  overflow:hidden}
+.plate::after{content:"";position:absolute;inset:6px;border:1px solid rgba(168,127,44,.28);pointer-events:none}
+.plate .frame{position:relative;overflow:hidden;background:#e0d2b4;display:block;width:100%;
+  cursor:zoom-in;aspect-ratio:16/10}
+.plate img{display:block;width:100%;height:100%;object-fit:cover;
+  transform:scale(1.12);transition:transform 1.4s cubic-bezier(.2,.7,.3,1), filter .5s;
+  filter:sepia(.16) saturate(.94) contrast(1.03)}
+.plate.in img{transform:scale(1)}
+.plate .frame:hover img{filter:sepia(0) saturate(1.05) contrast(1.05);transform:scale(1.04)}
+.plate figcaption{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;
+  margin-top:11px;font-size:.76rem;color:var(--ink-faint);font-style:italic;line-height:1.5}
+.plate figcaption b{font-family:"Cinzel",serif;font-style:normal;font-weight:600;
+  font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-deep)}
+.plate figcaption a{color:var(--ink-faint);text-decoration:none;border-bottom:1px dotted var(--rule)}
+.plate figcaption a:hover{color:var(--ox)}
+.plate--tall .frame{aspect-ratio:4/5}
+.hero-plate{margin:38px auto 0;max-width:1000px}
+.hero-plate .frame{aspect-ratio:21/9}
+
+/* drawn SVG plates keep their night palette, framed like the photos */
+.scene{margin:0 0 18px;padding:12px;border:1px solid var(--rule);position:relative;
+  background:var(--paper-l);box-shadow:var(--shadow)}
+.scene::after{content:"";position:absolute;inset:6px;border:1px solid rgba(168,127,44,.28);pointer-events:none}
+.scene svg,.scene img{display:block;width:100%;height:auto}
+.scene .cap{position:absolute;right:18px;bottom:18px;font-size:.64rem;color:#e8d6ae;
+  font-family:"Cinzel",serif;letter-spacing:.1em;text-transform:uppercase;
+  background:rgba(20,13,30,.6);padding:3px 9px}
+.outro-scene{margin:80px 0 0}
+.outro-scene .cap{right:18px;bottom:18px}
+.lit{animation:glow 4.5s ease-in-out infinite alternate}
+@keyframes glow{from{opacity:.55}to{opacity:1}}
+
+/* ---------- lightbox ---------- */
+#lightbox{position:fixed;inset:0;z-index:60;display:none;place-items:center;
+  background:rgba(28,20,10,.92);padding:32px;cursor:zoom-out}
+#lightbox.open{display:grid;animation:fade .3s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+#lightbox img{max-width:min(1200px,94vw);max-height:82vh;display:block;
+  border:10px solid var(--paper-l);box-shadow:0 30px 80px rgba(0,0,0,.6)}
+#lightbox .lbcap{margin-top:14px;text-align:center;color:#e8d6ae;font-size:.85rem;font-style:italic;
+  max-width:60ch}
+#lightbox .lbcap a{color:var(--gold-pale)}
+
+/* ---------- toolbar ---------- */
+.toolbar{margin:52px 0 0;padding:30px;border:2px solid var(--gold);position:relative;
+  background:linear-gradient(150deg, rgba(255,251,240,.9), rgba(233,220,192,.75));
+  box-shadow:var(--shadow)}
+.toolbar::before{content:"";position:absolute;inset:5px;border:1px solid rgba(168,127,44,.4);pointer-events:none}
+.toolbar h2{font-family:"Cinzel",serif;font-size:1.05rem;letter-spacing:.1em;margin:0 0 12px;
+  color:var(--ox);text-transform:uppercase}
+.toolbar p{margin:0 0 20px;color:var(--ink-soft);font-size:.98rem}
+.filters{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.filters button{font-family:"Cinzel",serif;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:9px 17px;cursor:pointer;color:var(--ink-soft);background:rgba(255,252,244,.7);
+  border:1px solid var(--rule);border-radius:0;
+  transition:background .25s,color .25s,border-color .25s,transform .15s}
+.filters button:hover{border-color:var(--gold);color:var(--ox);transform:translateY(-1px)}
+.filters button[aria-pressed="true"]{background:linear-gradient(180deg,#b98f34,#8a6620);
+  border-color:var(--gold-deep);color:#fdf6e4;box-shadow:0 4px 14px rgba(140,105,35,.3)}
+.filters button:focus-visible{outline:2px solid var(--ox);outline-offset:3px}
+#count{margin-left:auto;font-size:.82rem;color:var(--ink-faint);font-style:italic}
+#routeBtn{margin-top:18px;width:100%;text-align:left;font-family:"Cinzel",serif;font-size:.75rem;
+  letter-spacing:.14em;text-transform:uppercase;padding:13px 16px;cursor:pointer;color:var(--gold-deep);
+  background:rgba(168,127,44,.08);border:1px dashed var(--gold);transition:background .25s}
+#routeBtn:hover{background:rgba(168,127,44,.18)}
+#routeBox{max-height:0;overflow:hidden;transition:max-height .5s ease}
+#routeBox.open{max-height:900px}
+#routeBox ol{margin:18px 0 0;padding-left:26px;columns:2;column-gap:28px}
+#routeBox li{margin-bottom:8px;font-size:.9rem;break-inside:avoid}
+#routeBox a{color:var(--ink-soft);text-decoration:none;border-bottom:1px dotted var(--rule)}
+#routeBox a:hover{color:var(--ox)}
+@media (max-width:560px){#routeBox ol{columns:1}}
+
+/* ---------- chapters ---------- */
+section.chapter{margin-top:110px;scroll-margin-top:80px}
+.chapter-banner{position:relative;margin:0 0 30px;overflow:hidden;height:clamp(180px,30vw,320px);
+  border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);
+  background:#2b2114}
+.chapter-banner img{position:absolute;inset:0;width:100%;height:118%;object-fit:cover;
+  will-change:transform;filter:sepia(.3) saturate(.8) contrast(1.05) brightness(.72)}
+.chapter-banner .veil{position:absolute;inset:0;
+  background:linear-gradient(180deg, rgba(35,26,17,.25), rgba(35,26,17,.72))}
+.chapter-banner .bcap{position:absolute;right:12px;bottom:8px;z-index:2;font-size:.62rem;
+  color:rgba(255,244,220,.6);font-style:italic}
+.chapter-banner .bcap a{color:inherit}
+.chapter-banner .btitle{position:absolute;inset:0;z-index:2;display:grid;place-items:center;
+  text-align:center;padding:20px}
+.chapter-banner .btitle span{font-family:"Cinzel Decorative",serif;font-weight:900;
+  font-size:clamp(34px,7vw,64px);color:#f6e7c2;line-height:1;letter-spacing:.14em;
+  text-shadow:0 4px 26px rgba(0,0,0,.75);
+  padding:14px 30px;border-top:1px solid rgba(246,231,194,.55);border-bottom:1px solid rgba(246,231,194,.55)}
+.chapter-head{display:flex;align-items:center;gap:16px;margin-bottom:8px}
+.chapter-head svg{width:46px;height:46px;flex:none;stroke:var(--gold-deep);
+  filter:drop-shadow(0 3px 5px rgba(90,65,25,.2))}
+.chapter-head h2{font-family:"Cinzel Decorative",serif;font-size:clamp(21px,4vw,31px);margin:0;line-height:1.2;
+  color:var(--ox)}
+.chapter-note{margin:0 0 26px 62px;color:var(--ink-faint);font-style:italic;font-size:.98rem}
+.rule{height:14px;margin:0 0 34px;position:relative;overflow:hidden;
+  display:flex;align-items:center}
+.rule::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--rule)}
+.rule::after{content:"";position:absolute;inset:0;transform:scaleX(0);transform-origin:left;
+  background:
+    radial-gradient(circle at 50% 50%, var(--gold) 3px, transparent 4px),
+    linear-gradient(90deg,transparent,var(--gold) 50%,transparent);
+  background-repeat:no-repeat;background-position:center, center;background-size:100% 100%, 100% 2px;
+  transition:transform 1.2s cubic-bezier(.2,.7,.3,1)}
+.chapter.seen .rule::after{transform:scaleX(1)}
+
+/* ---------- entries ---------- */
+.entry{position:relative;margin-bottom:30px;padding:30px 32px 26px 34px;
+  border:1px solid var(--rule);
+  background:linear-gradient(158deg, rgba(255,252,244,.94), rgba(240,229,205,.8));
+  box-shadow:var(--shadow);scroll-margin-top:90px;
+  opacity:0;transform:translateY(38px) translateX(var(--dx,0)) rotate(var(--rot,0deg));
+  transition:opacity .8s ease, transform .8s cubic-bezier(.2,.7,.3,1),
+             box-shadow .35s, border-color .35s}
+.entry::after{content:"";position:absolute;inset:6px;pointer-events:none;
+  border:1px solid rgba(168,127,44,.2)}
+.entry:nth-child(odd){--dx:-26px;--rot:-.5deg}
+.entry:nth-child(even){--dx:26px;--rot:.5deg}
+.entry.in{opacity:1;transform:none}
+.entry:hover{border-color:var(--gold);
+  box-shadow:0 24px 54px rgba(90,65,25,.24)}
+.entry::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px}
+.entry[data-cat="fact"]::before{background:linear-gradient(180deg,#2e8f74,var(--teal))}
+.entry[data-cat="likely"]::before{background:linear-gradient(180deg,var(--gold-lt),var(--gold-deep))}
+.entry[data-cat="myth"]::before{background:linear-gradient(180deg,#b3444f,var(--ox))}
+.entry[data-cat="fun"]::before{background:linear-gradient(180deg,#4d63a8,var(--indigo))}
+.entry.flash{animation:flash 1.6s ease}
+@keyframes flash{0%{box-shadow:var(--shadow)}25%{box-shadow:0 0 0 6px rgba(168,127,44,.35), var(--shadow)}100%{box-shadow:var(--shadow)}}
+.entry h3{font-family:"Cinzel",serif;font-weight:700;font-size:1.2rem;margin:0 0 14px;
+  color:var(--ink);line-height:1.35;letter-spacing:.01em}
+.entry p{margin:0 0 12px;color:var(--ink-soft)}
+.entry p:first-of-type::first-letter{}
+.entry strong{color:var(--ox);font-weight:600}
+.entry em{color:var(--ink)}
+.badge{display:inline-block;font-family:"Cinzel",serif;font-size:.58rem;letter-spacing:.2em;
+  padding:5px 12px;margin-bottom:14px;border:1px solid currentColor;text-transform:uppercase}
+.b-fact{color:var(--teal)}.b-likely{color:var(--gold-deep)}.b-myth{color:var(--ox)}
+.b-fun{color:var(--indigo)}.b-gone{color:var(--ink-faint);border-style:dashed}
+.addr{display:flex;gap:9px;align-items:baseline;font-size:.86rem;color:var(--ink-faint);margin:0}
+.addr svg{flex:none;width:12px;height:12px;opacity:.8;transform:translateY(1px);fill:var(--gold-deep)}
+.photolink{display:inline-block;margin-top:12px;font-size:.8rem;color:var(--gold-deep);
+  text-decoration:none;border-bottom:1px dotted var(--rule)}
+.photolink:hover{color:var(--ox)}
+.stepno{position:absolute;top:-13px;left:-13px;width:32px;height:32px;
+  display:none;place-items:center;font-family:"Cinzel",serif;font-size:.76rem;color:#fdf6e4;
+  background:linear-gradient(180deg,#b98f34,#8a6620);border:1px solid var(--gold-deep);
+  box-shadow:0 4px 12px rgba(90,65,25,.35);z-index:2}
+body.routemode .stepno{display:grid}
+
+.notice{margin-top:90px;padding:34px;border:2px solid var(--ox);position:relative;
+  background:linear-gradient(150deg, rgba(255,246,238,.92), rgba(238,218,208,.8))}
+.notice::before{content:"";position:absolute;inset:5px;border:1px solid rgba(124,31,39,.3);pointer-events:none}
+.notice h2{font-family:"Cinzel",serif;font-size:1.02rem;color:var(--ox);margin:0 0 14px;
+  letter-spacing:.08em;text-transform:uppercase}
+.notice p{margin:0 0 12px;color:var(--ink-soft);font-size:.97rem}
+.notice p:last-child{margin:0}
+footer{margin-top:80px;padding-top:28px;border-top:1px solid var(--rule);
+  font-size:.84rem;color:var(--ink-faint);line-height:1.75}
+footer a{color:var(--gold-deep);text-decoration:none;border-bottom:1px dotted var(--rule)}
+footer a:hover{color:var(--ox)}
+.hidden{display:none!important}
+@media (max-width:560px){
+  body{font-size:17.5px}
+  header.hero{padding:52px 16px 12px}
+  .chapter-note{margin-left:0}
+  .entry{padding:22px 20px 20px 24px;--dx:0!important;--rot:0deg!important}
+  .plate{padding:8px}
+}
+
+/* ---------- plattegrond ---------- */
+.mapsection{margin-top:110px;scroll-margin-top:80px}
+.mapplate{margin:0;padding:14px;border:1px solid var(--rule);background:var(--paper-l);
+  box-shadow:var(--shadow);position:relative}
+.mapplate::after{content:"";position:absolute;inset:7px;border:1px solid rgba(168,127,44,.28);pointer-events:none}
+.mapframe{overflow:hidden;background:#f4ead4}
+#hpmap{display:block;width:100%;height:auto}
+.mapplate figcaption{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-top:12px;
+  font-size:.78rem;color:var(--ink-faint);font-style:italic}
+.mapplate figcaption b{font-family:"Cinzel",serif;font-style:normal;font-weight:600;font-size:.66rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--gold-deep)}
+#hpmap .mk{cursor:pointer;opacity:0;transform:translateY(-10px) scale(.7);transform-box:fill-box;
+  transform-origin:center;transition:opacity .5s ease var(--d,0ms), transform .6s cubic-bezier(.2,1.5,.4,1) var(--d,0ms)}
+#hpmap.ready .mk{opacity:1;transform:none}
+#hpmap .mk .lbl{opacity:0;transition:opacity .22s}
+#hpmap .mk:hover .lbl,#hpmap .mk:focus .lbl,#hpmap .mk.on .lbl{opacity:1}
+#hpmap .mk:hover .halo,#hpmap .mk:focus .halo,#hpmap .mk.on .halo{opacity:.22}
+#hpmap .mk .halo{transition:opacity .25s}
+#hpmap .mk:focus{outline:none}
+#hpmap .mk.dim{opacity:.16;pointer-events:none}
+#hpmap #mroute{stroke-dashoffset:2600;transition:stroke-dashoffset 3.4s ease-out .35s}
+#hpmap.ready #mroute{stroke-dashoffset:0}
+@media (prefers-reduced-motion:reduce){
+  #hpmap .mk{opacity:1;transform:none;transition:none}
+  #hpmap #mroute{stroke-dashoffset:0;transition:none}
+}
+
+
+/* ===================== ZWEINSTEIN-LAAG ===================== */
+:root{
+  --gryf:#7a1120;--gryf-lt:#a52a37;--huff:#a8801f;--rave:#22356d;--slyt:#124a3c;
+  --gold:#a87f2c;--gold-lt:#cfa544;--gold-deep:#6d4f16;--ox:#7a1120;
+}
+body{background:var(--paper)}
+h1{background:linear-gradient(100deg,#4d0c14 0%,#6d1019 18%,#8a6620 40%,#d4ac52 50%,#8a6620 60%,#6d1019 82%,#4d0c14 100%);
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:none;filter:drop-shadow(0 2px 3px rgba(90,30,25,.22))}
+.candle .wax{border:1px solid rgba(140,105,45,.35)}
+.candle .flame{filter:drop-shadow(0 0 6px rgba(255,170,40,.9))}
+.hero .meta{color:var(--gryf)}
+.sigil{filter:drop-shadow(0 5px 10px rgba(122,17,32,.3))}
+
+/* huiskleuren op de vier labels */
+.entry[data-cat="fact"]::before{background:linear-gradient(180deg,#1f7d63,var(--slyt))}
+.entry[data-cat="likely"]::before{background:linear-gradient(180deg,#e0c163,var(--huff))}
+.entry[data-cat="myth"]::before{background:linear-gradient(180deg,var(--gryf-lt),var(--gryf))}
+.entry[data-cat="fun"]::before{background:linear-gradient(180deg,#3d55a3,var(--rave))}
+.b-fact{color:var(--slyt)}.b-likely{color:#8a6620}.b-myth{color:var(--gryf)}.b-fun{color:var(--rave)}
+.filters button[data-f="fact"][aria-pressed="true"]{background:linear-gradient(180deg,#1f7d63,var(--slyt));border-color:#0d3a2f;color:#eaf7f2}
+.filters button[data-f="likely"][aria-pressed="true"]{background:linear-gradient(180deg,#e0c163,var(--huff));border-color:#6d4f16;color:#2a1f06}
+.filters button[data-f="myth"][aria-pressed="true"]{background:linear-gradient(180deg,var(--gryf-lt),var(--gryf));border-color:#4d0a13;color:#fbe9d9}
+.filters button[data-f="fun"][aria-pressed="true"]{background:linear-gradient(180deg,#3d55a3,var(--rave));border-color:#141f43;color:#e6ecff}
+
+.chapter-head h2{color:var(--gryf)}
+.entry h3{color:var(--gryf)}
+.entry strong{color:var(--gryf)}
+.toolbar{border-color:var(--gryf)}
+.toolbar h2{color:var(--gryf)}
+.notice{border-color:var(--gryf)}
+.notice h2{color:var(--gryf)}
+
+/* kaarsen van de Grote Zaal, warm boven het perkament */
+.candles{height:280px}
+.candle .wax{background:linear-gradient(180deg,#fffaf0,#efdfb8 55%,#c9b489);
+  box-shadow:0 0 30px rgba(255,196,86,.45)}
+.candle::after{content:"";position:absolute;left:50%;top:-26px;width:52px;height:52px;margin-left:-26px;
+  border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle, rgba(255,198,90,.34) 0%, rgba(255,198,90,0) 70%)}
+
+/* wapenschild-strook onder de hoofdstuktitel */
+.rule::after{background:
+  radial-gradient(circle at 50% 50%, var(--gryf) 3.5px, transparent 4.5px),
+  linear-gradient(90deg,transparent,var(--gold) 50%,transparent);
+  background-repeat:no-repeat;background-position:center, center;background-size:100% 100%, 100% 2px}
+
+/* sluipwegwijzer op perkament: vergeeld in plaats van omgekeerd */
+#hpmap.marauder{filter:sepia(.8) saturate(1.5) hue-rotate(-10deg) contrast(1.06) brightness(.97)}
+.maraudbar button{color:var(--gryf);background:rgba(122,17,32,.06);border-color:var(--gryf)}
+.maraudbar button:hover{background:rgba(122,17,32,.14)}
+
+/* spreukbalk op perkament */
+#spellbar{background:rgba(28,20,10,.94);border-color:var(--gold);color:#f0dda8}
+#spellbar.ok{border-color:#1f7d63;color:#9fe6cf}
+#spellbar.no{border-color:var(--gryf-lt);color:#f6b9c0}
+.spellhint{color:var(--ink-faint)}
+.spellhint b{color:var(--gryf)}
+
+/* uil in warme tinten boven perkament */
+#owl{filter:drop-shadow(0 10px 20px rgba(90,65,25,.4))}
+
+
+/* ---------------- toverstafknop + spreukenmenu ---------------- */
+#wandBtn{position:fixed;right:16px;bottom:16px;z-index:57;display:flex;align-items:center;gap:9px;
+  padding:12px 18px;cursor:pointer;font-family:"Cinzel",serif;font-size:.72rem;letter-spacing:.14em;
+  text-transform:uppercase;color:#f6ead0;background:linear-gradient(180deg,#8f1526,#5f0d19);
+  border:1px solid #4d0a13;box-shadow:0 10px 26px rgba(60,10,18,.4)}
+#wandBtn span[aria-hidden]{font-size:1rem;color:#f0d17a}
+#wandBtn:hover{background:linear-gradient(180deg,#a5303e,#7a1120)}
+#wandBtn[aria-expanded="true"]{background:linear-gradient(180deg,#6d4f16,#4a3410)}
+#wandMenu{position:fixed;right:16px;bottom:70px;z-index:57;width:min(340px,calc(100vw - 32px));
+  max-height:min(62vh,540px);overflow:auto;padding:18px;
+  background:linear-gradient(160deg,#f8efdb,#e9dcbb);border:2px solid var(--gryf);
+  box-shadow:0 24px 60px rgba(60,40,15,.45)}
+#wandMenu .wm-t{margin:0 0 12px;font-family:"Cinzel",serif;font-size:.68rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gryf)}
+#wandMenu .wm-grid{display:grid;gap:8px}
+#wandMenu .wm-grid button{display:block;width:100%;text-align:left;cursor:pointer;
+  padding:11px 13px;font-family:"Cinzel",serif;font-size:.78rem;letter-spacing:.06em;
+  color:#3a2a16;background:rgba(255,252,244,.8);border:1px solid var(--rule)}
+#wandMenu .wm-grid button:hover{border-color:var(--gryf);background:#fffdf6}
+#wandMenu .wm-grid small{display:block;margin-top:3px;font-family:"EB Garamond",serif;
+  font-size:.82rem;letter-spacing:0;font-style:italic;color:var(--ink-faint);text-transform:none}
+#wandMenu .wm-f{margin:14px 0 0;font-size:.78rem;font-style:italic;color:var(--ink-faint)}
+
+/* ---------------- mobiel ---------------- */
+@media (max-width:760px){
+  .hero .meta{letter-spacing:.12em;font-size:.66rem;white-space:nowrap}
+  .hero-plate .frame{aspect-ratio:16/10}
+  .deco-line{max-width:78vw}
+  /* de kaart wordt schuifbaar in plaats van onleesbaar klein */
+  .mapframe{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
+    scroll-snap-type:x proximity}
+  .mapframe #hpmap{width:860px;max-width:none}
+  .mapnote{display:block;margin:10px 2px 0;font-size:.8rem;font-style:italic;color:var(--ink-faint)}
+  .maraudbar{flex-direction:column}
+  .maraudbar button{width:100%;text-align:center}
+  .filters button{padding:11px 16px}
+  #count{margin-left:0;width:100%}
+  #lightbox{padding:12px}
+  #lightbox img{border-width:6px;max-height:74vh}
+  #owl{width:82px}
+  #wandBtn{right:12px;bottom:12px;padding:13px 16px}
+  #wandMenu{right:12px;left:12px;bottom:66px;width:auto}
+  #spellbar{bottom:76px}
+  .chapter-banner{height:clamp(150px,42vw,230px)}
+  .plate figcaption{font-size:.72rem}
+  .toolbar{padding:22px 18px}
+  .notice{padding:22px 18px}
+  section.chapter{margin-top:70px}
+  .mapsection{margin-top:70px}
+}
+@media (max-width:400px){
+  h1{font-size:clamp(30px,9vw,40px)}
+  .hero .sub{font-size:1rem}
+}
+.mapnote{display:none}
+@media (hover:none){
+  .entry:hover{box-shadow:var(--shadow)}
+}
+#mapFull #hpmap .mk .lbl{opacity:1}
+
+
+/* ---------------- de kaart rolt open op het hele scherm ---------------- */
+#mapFull{position:fixed;inset:0;z-index:64;display:none;
+  background:radial-gradient(ellipse at 50% 40%, #2a1c08, #0b0703)}
+#mapFull.open{display:block}
+#mapFull .mf-inner{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:14px}
+#mapFull .mf-clip{position:relative;width:100%;flex:1 1 auto;min-height:0;overflow:hidden;
+  max-height:0;transition:max-height .95s cubic-bezier(.25,.8,.3,1)}
+#mapFull.rolled .mf-clip{max-height:100%}
+#mapFull .mf-body{position:absolute;inset:0;overflow:auto;-webkit-overflow-scrolling:touch;
+  background:#f2e7d0;box-shadow:inset 0 0 90px rgba(120,90,40,.35)}
+#mapFull .mf-body svg{display:block;height:100%;width:auto;max-width:none;margin:0 auto}
+#mapFull .mf-rod{display:block;width:min(100%,1180px);height:16px;flex:none;
+  background:linear-gradient(180deg,#c9a34a,#6d4f16 55%,#3d2b0c);
+  border-radius:9px;box-shadow:0 6px 18px rgba(0,0,0,.55);position:relative}
+#mapFull .mf-rod::before,#mapFull .mf-rod::after{content:"";position:absolute;top:-5px;width:16px;height:26px;
+  border-radius:5px;background:linear-gradient(180deg,#e2c477,#8a6620 60%,#4a3410)}
+#mapFull .mf-rod::before{left:-9px}#mapFull .mf-rod::after{right:-9px}
+#mapFull .mf-rod-top{transform:translateY(6px)}
+#mapFull #mfClose{margin-top:14px;flex:none;font-family:"Cinzel",serif;font-size:.72rem;
+  letter-spacing:.16em;text-transform:uppercase;padding:12px 24px;cursor:pointer;
+  color:#f6ead0;background:#7a1120;border:1px solid #4d0a13;opacity:0;transition:opacity .5s .6s}
+#mapFull.rolled #mfClose{opacity:1}
+#mapFull .mf-hint{flex:none;margin:10px 0 0;text-align:center;font-size:.75rem;
+  font-style:italic;color:rgba(246,234,208,.5);opacity:0;transition:opacity .5s .7s}
+#mapFull.rolled .mf-hint{opacity:1}
+body.mapopen{overflow:hidden}
+body.mapopen #wandBtn,body.mapopen #wandMenu{display:none}
+@media (max-width:760px){
+  #mapFull .mf-inner{padding:10px}
+  #mapFull #mfClose{font-size:.66rem;padding:11px 16px}
+}
+
+/* ===================== TOVEREDITIE ===================== */
+#owl{position:fixed;top:16%;left:-140px;width:108px;z-index:30;opacity:0;
+  pointer-events:auto;cursor:pointer;filter:drop-shadow(0 8px 22px rgba(0,0,0,.55))}
+#owl .wing{transform-origin:66px 44px}
+#owl .wing-f{animation:flapF .5s ease-in-out infinite alternate}
+#owl .wing-b{animation:flapB .5s ease-in-out infinite alternate}
+@keyframes flapF{from{transform:rotate(-26deg) scaleY(1)}to{transform:rotate(20deg) scaleY(.78)}}
+@keyframes flapB{from{transform:rotate(-14deg) scaleY(.95)}to{transform:rotate(12deg) scaleY(.8)}}
+#owl.dropped .letter{opacity:0;transition:opacity .25s}
+#owl:hover{filter:drop-shadow(0 8px 26px rgba(0,0,0,.55)) drop-shadow(0 0 16px rgba(255,220,140,.55))}
+
+/* kaarsen terug, mooier */
+.candles{display:block;position:fixed;top:0;left:0;right:0;z-index:-2;
+  pointer-events:none;overflow:hidden}
+.candle{position:absolute;width:15px;animation:bob 7s ease-in-out infinite alternate}
+.candle .wax{display:block;width:15px;height:44px;border-radius:2px 2px 3px 3px;
+  background:linear-gradient(180deg,#fdf3d8,#e6d3a0 55%,#b39f74);
+  box-shadow:0 0 26px rgba(255,214,120,.32)}
+.candle .wax::after{content:"";display:block;width:3px;height:14px;margin-left:2px;
+  background:linear-gradient(180deg,#fdf3d8,rgba(253,243,216,0));border-radius:2px}
+.candle .flame{display:block;width:10px;height:17px;margin:0 auto -3px;border-radius:50% 50% 45% 45%;
+  background:radial-gradient(circle at 50% 70%, #fff8dc 0%, #ffcf5c 45%, #ff8a2b 80%, rgba(255,120,20,0) 100%);
+  animation:flicker 1.5s ease-in-out infinite alternate}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(20px)}}
+@keyframes flicker{from{transform:scaleY(1) scaleX(1);opacity:.8}to{transform:scaleY(1.22) scaleX(.86);opacity:1}}
+
+/* stofsporen achter de muis */
+#dust{position:fixed;inset:0;z-index:28;pointer-events:none}
+
+/* lumos */
+#lumos{position:fixed;inset:0;z-index:26;pointer-events:none;opacity:0;transition:opacity .6s;
+  background:radial-gradient(circle 190px at var(--mx,50%) var(--my,50%),
+    rgba(255,236,180,.14) 0%, rgba(255,225,150,.06) 42%, rgba(6,4,14,.86) 78%)}
+body.lumos #lumos{opacity:1}
+body.lumos .candle .flame{animation-duration:.9s}
+
+/* brief van de uil */
+#hogletWrap{position:fixed;inset:0;z-index:62;display:none;place-items:center;padding:24px;
+  background:rgba(6,4,14,.72)}
+#hogletWrap.open{display:grid}
+#hoglet{position:relative;max-width:520px;padding:44px 40px 34px;text-align:center;
+  background:linear-gradient(160deg,#f6ead0,#e6d5ac);color:#2c2114;
+  border:2px solid #8a6a20;box-shadow:0 30px 80px rgba(0,0,0,.6);
+  animation:unfold .55s cubic-bezier(.2,1.3,.4,1)}
+@keyframes unfold{from{transform:scale(.3) rotate(-8deg);opacity:0}to{transform:none;opacity:1}}
+#hoglet::after{content:"";position:absolute;inset:8px;border:1px solid rgba(138,106,32,.45);pointer-events:none}
+#hoglet .seal{position:absolute;top:-22px;left:50%;margin-left:-22px;width:44px;height:44px;display:block}
+#hoglet .seal svg{width:44px;height:44px;display:block}
+#hoglet .from{margin:0 0 14px;font-family:"Cinzel",serif;font-size:.66rem;letter-spacing:.22em;
+  text-transform:uppercase;color:#8a6a20}
+#hoglet .body{margin:0 0 26px;font-size:1.16rem;line-height:1.65;font-style:italic}
+#hoglet button{font-family:"Cinzel",serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:10px 22px;cursor:pointer;color:#f6ead0;background:#8d1f2c;border:1px solid #5e1119}
+#hoglet button:hover{background:#a5303e}
+
+/* patronus */
+#patronus{position:fixed;top:38%;left:-220px;width:210px;z-index:29;opacity:0;pointer-events:none;
+  filter:drop-shadow(0 0 26px rgba(170,225,255,.85))}
+
+/* spreukbalk */
+#spellbar{position:fixed;left:50%;bottom:26px;transform:translate(-50%,26px);z-index:58;
+  display:none;align-items:center;gap:12px;padding:12px 24px;
+  background:rgba(16,12,32,.95);border:1px solid var(--gold);
+  box-shadow:0 14px 40px rgba(0,0,0,.6), 0 0 30px rgba(193,154,63,.14);
+  font-family:"Cinzel",serif;font-size:.9rem;letter-spacing:.16em;color:var(--gold-lt);
+  text-transform:lowercase;transition:transform .3s, opacity .3s;opacity:0}
+#spellbar.on{display:flex;transform:translate(-50%,0);opacity:1}
+#spellbar .star{color:var(--gold);animation:twinkle2 1.4s ease-in-out infinite alternate}
+#spellbar.ok{border-color:#4fc4a8;color:#8fe6cf}
+#spellbar.no{border-color:#d16a76;color:#f0aab4}
+@keyframes twinkle2{from{opacity:.35;transform:scale(.85)}to{opacity:1;transform:scale(1.15)}}
+.spellhint{margin:16px 0 0;font-size:.84rem;color:var(--ink-faint);font-style:italic}
+.spellhint b{font-family:"Cinzel",serif;font-style:normal;font-size:.7rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--gold-deep);font-weight:600}
+
+/* zweven */
+.entry.levitate{animation:levit 2.6s cubic-bezier(.4,0,.3,1)}
+@keyframes levit{0%{transform:none}
+  30%{transform:translateY(-26px) rotate(-1.2deg)}
+  60%{transform:translateY(-18px) rotate(1deg)}
+  100%{transform:none}}
+
+/* sluipwegwijzer */
+.maraudbar{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
+.maraudbar button{font-family:"Cinzel",serif;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:11px 20px;cursor:pointer;color:var(--gold-lt);background:rgba(193,154,63,.09);
+  border:1px dashed var(--gold);transition:background .25s,color .25s}
+.maraudbar button:hover{background:rgba(193,154,63,.2)}
+#hpmap{transition:filter .9s ease}
+#hpmap.marauder{filter:sepia(.85) saturate(1.45) hue-rotate(-12deg) contrast(1.08) brightness(.94)}
+#mfeet{opacity:0;transition:opacity .6s}
+#hpmap.marauder #mfeet{opacity:1}
+
+
+@media (prefers-reduced-motion:reduce){
+  #owl,#patronus,#dust{display:none}
+  .candle,.candle .flame{animation:none!important}
+  .entry.levitate{animation:none}
+}
+@media (max-width:560px){
+  #spellbar{font-size:.78rem;padding:10px 16px;left:12px;right:12px;transform:none;bottom:14px}
+  #spellbar.on{transform:none}
+  #hoglet{padding:38px 22px 28px}
+}
+.toolbar .srcline{font-size:.8rem;color:var(--ink-faint);font-style:italic;margin-bottom:0}
+.toolbar .srcline a{color:var(--gold-deep);text-decoration:none;border-bottom:1px dotted var(--rule)}
+.toolbar .srcline a:hover{color:var(--gryf)}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="topbar"><div class="inner">
+  <span class="now" id="nowChapter">Het Edinburgh van Harry Potter · tovereditie</span>
+  <button class="up" id="toTop">▲ NAAR BOVEN</button>
+</div></div>
+
+<nav id="spy" aria-label="Hoofdstukken"></nav>
+
+<div class="sky" id="pxSky"></div>
+<div class="stars" id="pxStars"></div>
+<div class="candles" id="pxCandles" aria-hidden="true">
+  <div class="candle" style="left:8%;top:24px;animation-delay:-1.2s"><span class="flame"></span><span class="wax"></span></div>
+  <div class="candle" style="left:21%;top:66px;animation-delay:-3.4s"><span class="flame"></span><span class="wax"></span></div>
+  <div class="candle" style="left:34%;top:12px;animation-delay:-2.1s"><span class="flame"></span><span class="wax"></span></div>
+  <div class="candle" style="left:63%;top:48px;animation-delay:-4.6s"><span class="flame"></span><span class="wax"></span></div>
+  <div class="candle" style="left:77%;top:18px;animation-delay:-0.6s"><span class="flame"></span><span class="wax"></span></div>
+  <div class="candle" style="left:90%;top:74px;animation-delay:-5.2s"><span class="flame"></span><span class="wax"></span></div>
+</div>
+
+<div class="horizon" aria-hidden="true">
+  <div class="band far" id="bandFar"></div>
+  <div class="band near" id="bandNear"></div>
+</div>
+
+<svg id="owl" viewBox="0 0 132 96" aria-hidden="true">
+  <defs>
+    <linearGradient id="owlBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f3e6c8"/><stop offset="55%" stop-color="#d8bf90"/>
+      <stop offset="100%" stop-color="#9d7f4f"/></linearGradient>
+    <linearGradient id="owlWing" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8d5aa"/><stop offset="60%" stop-color="#b7975f"/>
+      <stop offset="100%" stop-color="#7c6135"/></linearGradient>
+    <radialGradient id="owlGlow"><stop offset="0%" stop-color="rgba(255,228,160,.5)"/>
+      <stop offset="100%" stop-color="rgba(255,228,160,0)"/></radialGradient>
+  </defs>
+  <ellipse cx="66" cy="50" rx="60" ry="40" fill="url(#owlGlow)"/>
+  <!-- staart -->
+  <path d="M56 62 q-16 8 -26 20 q14 -2 26 -10z" fill="#a5854f" stroke="#6d5527" stroke-width="1"/>
+  <!-- achtervleugel -->
+  <g class="wing wing-b">
+    <path d="M70 44 q-26 -30 -56 -30 q10 24 32 36z" fill="#8a6f3e" stroke="#5f4a20" stroke-width="1.1"/>
+    <path d="M60 34 q-14 -8 -28 -12 M56 40 q-16 -4 -30 -4 M54 46 q-14 2 -26 8"
+      fill="none" stroke="#5f4a20" stroke-width=".8" opacity=".6"/>
+  </g>
+  <!-- lijf -->
+  <ellipse cx="68" cy="50" rx="19" ry="24" fill="url(#owlBody)" stroke="#6d5527" stroke-width="1.2"/>
+  <g fill="#a5854f" opacity=".55">
+    <ellipse cx="62" cy="48" rx="2.4" ry="1.4"/><ellipse cx="70" cy="46" rx="2.4" ry="1.4"/>
+    <ellipse cx="66" cy="55" rx="2.4" ry="1.4"/><ellipse cx="74" cy="54" rx="2.4" ry="1.4"/>
+    <ellipse cx="62" cy="62" rx="2.4" ry="1.4"/><ellipse cx="71" cy="63" rx="2.4" ry="1.4"/>
+  </g>
+  <!-- kop met hartvormige sluier -->
+  <path d="M68 34 q-15 -2 -15 -14 q0 -12 15 -12 q15 0 15 12 q0 12 -15 14z"
+    fill="#f6ead0" stroke="#6d5527" stroke-width="1.2"/>
+  <path d="M68 32 q-9 -3 -9 -12 q0 -8 9 -8 q9 0 9 8 q0 9 -9 12z" fill="#fdf6e2" opacity=".9"/>
+  <circle cx="62.5" cy="17" r="4.2" fill="#241a11"/><circle cx="73.5" cy="17" r="4.2" fill="#241a11"/>
+  <circle cx="63.8" cy="15.6" r="1.5" fill="#fff2c8"/><circle cx="74.8" cy="15.6" r="1.5" fill="#fff2c8"/>
+  <path d="M68 20 l2.6 5 -2.6 2 -2.6 -2z" fill="#c9a34a" stroke="#6d5527" stroke-width=".7"/>
+  <!-- voorvleugel -->
+  <g class="wing wing-f">
+    <path d="M66 42 q-22 -36 -58 -40 q6 30 34 46z" fill="url(#owlWing)" stroke="#5f4a20" stroke-width="1.2"/>
+    <path d="M58 30 q-16 -12 -34 -18 M54 37 q-20 -8 -36 -10 M52 44 q-18 0 -32 6"
+      fill="none" stroke="#5f4a20" stroke-width=".9" opacity=".65"/>
+  </g>
+  <!-- pootjes met brief -->
+  <g class="letter">
+    <path d="M62 72 v6 M74 72 v6" stroke="#c9a34a" stroke-width="2" stroke-linecap="round"/>
+    <g transform="translate(52 76)">
+      <rect width="32" height="21" rx="1.5" fill="#f6ead0" stroke="#7c6135" stroke-width="1.1"/>
+      <path d="M0 0 L16 12 L32 0" fill="none" stroke="#7c6135" stroke-width="1"/>
+      <circle cx="16" cy="13" r="4" fill="#8d1f2c" stroke="#5e1119" stroke-width=".8"/>
+      <path d="M14.4 13 h3.2 M16 11.4 v3.2" stroke="#f3d79a" stroke-width=".7"/>
+    </g>
+  </g>
+</svg>
+
+
+<div id="lumos" aria-hidden="true"></div>
+<canvas id="dust" aria-hidden="true"></canvas>
+
+<div id="hogletWrap" aria-hidden="true">
+  <div id="hoglet" role="dialog" aria-modal="true" aria-labelledby="hogletT">
+    <span class="seal" aria-hidden="true">
+      <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="#8d1f2c" stroke="#5e1119" stroke-width="2"/>
+        <path d="M22 9 l3.4 7.6 8.2.8 -6.2 5.4 1.9 8.1 -7.3-4.4 -7.3 4.4 1.9-8.1 -6.2-5.4 8.2-.8z"
+          fill="#f3d79a" opacity=".9"/></svg>
+    </span>
+    <p class="from" id="hogletT">Per uilenpost bezorgd</p>
+    <p class="body" id="hogletBody"></p>
+    <button type="button" id="hogletClose">Brief sluiten</button>
+  </div>
+</div>
+
+<svg id="patronus" viewBox="0 0 160 120" aria-hidden="true">
+  <defs><radialGradient id="patGlow"><stop offset="0%" stop-color="rgba(200,240,255,.85)"/>
+    <stop offset="100%" stop-color="rgba(160,220,255,0)"/></radialGradient></defs>
+  <ellipse cx="80" cy="66" rx="76" ry="44" fill="url(#patGlow)"/>
+  <g fill="none" stroke="#dff2ff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 92 l6-26 q2-10 12-12 l26-4 q10-2 14-10"/>
+    <path d="M98 40 q8-6 14-4"/>
+    <path d="M112 36 q-4-12 2-20 M112 36 q6-12 16-16 M118 30 q8-4 14-2 M118 24 q6-8 14-10"/>
+    <path d="M52 54 l-4 34 M70 50 l-2 36 M88 50 l4 34 M100 48 l6 32"/>
+    <path d="M46 66 q-12 6 -18 18"/>
+  </g>
+  <circle cx="116" cy="34" r="2.6" fill="#eaf7ff"/>
+</svg>
+
+<button type="button" id="wandBtn" aria-expanded="false" aria-controls="wandMenu"
+  title="Spreuken"><span aria-hidden="true">✦</span><span class="lbl">Spreuken</span></button>
+<div id="wandMenu" hidden>
+  <p class="wm-t">Zeg een spreuk</p>
+  <div class="wm-grid">
+    <button type="button" data-spell="lumos">Lumos<small>staflicht aan</small></button>
+    <button type="button" data-spell="nox">Nox<small>staflicht uit</small></button>
+    <button type="button" data-spell="alohomora">Alohomora<small>opent de wandelroute</small></button>
+    <button type="button" data-spell="accio kasteel" data-enter="1">Accio kasteel<small>haalt een plek naar je toe</small></button>
+    <button type="button" data-spell="wingardium leviosa">Wingardium Leviosa<small>de kaarten zweven</small></button>
+    <button type="button" data-spell="expecto patronum">Expecto Patronum<small>roept een patronus op</small></button>
+    <button type="button" data-spell="revelio">Revelio<small>namen op de kaart</small></button>
+    <button type="button" data-spell="hedwig">Hedwig<small>roept de uil</small></button>
+    <button type="button" data-spell="i solemnly swear that i am up to no good">I solemnly swear&hellip;<small>rolt de kaart open op je hele scherm</small></button>
+    <button type="button" data-spell="mischief managed">Mischief managed<small>rolt de kaart weer op</small></button>
+  </div>
+  <p class="wm-f">Op een toetsenbord kun je ze ook gewoon intypen.</p>
+</div>
+
+<div id="spellbar" aria-hidden="true"><span class="star">✦</span><span id="spellTxt"></span></div>
+
+<header class="hero" id="hero">
+  <svg class="sigil" viewBox="0 0 120 120" aria-hidden="true">
+    <defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff3cf"/><stop offset="100%" stop-color="#c08e22"/></linearGradient></defs>
+    <circle cx="60" cy="60" r="52" fill="none" stroke="url(#gg)" stroke-width="1.5" opacity=".7"/>
+    <circle cx="60" cy="60" r="44" fill="none" stroke="url(#gg)" stroke-width="2.5"/>
+    <path d="M32 78 h56 v-4 l-6-3 v-13 h-5v6h-5v-9l-7-6-7 6v9h-5v-6h-5v13l-6 3z" fill="url(#gg)"/>
+    <path d="M26 86 q16 -8 34 -8 t34 8" fill="none" stroke="url(#gg)" stroke-width="2"/>
+    <path d="M60 22 l2.6 6.4 6.9.5-5.3 4.5 1.7 6.7-5.9-3.7-5.9 3.7 1.7-6.7-5.3-4.5 6.9-.5z" fill="url(#gg)"/>
+    <circle cx="30" cy="40" r="2" fill="url(#gg)"/><circle cx="90" cy="40" r="2" fill="url(#gg)"/>
+  </svg>
+  <h1>Het Edinburgh van<br>Harry Potter</h1>
+  <p class="sub">Alles in de stad dat J.K. Rowling inspireerde, haar boeken zag ontstaan, of er inmiddels naar vernoemd is.</p>
+  <p class="meta">T O V E R E D I T I E &nbsp;·&nbsp; S E P T E M B E R &nbsp; 2 0 2 6</p>
+
+  <div class="deco-line" aria-hidden="true"><span></span><svg viewBox="0 0 24 24"><path d="M12 1l2.3 6.2L20.8 8l-5 4.3 1.6 6.5L12 15.3 6.6 18.8l1.6-6.5-5-4.3 6.5-.8z"/></svg><span></span></div>
+      <figure class="plate hero-plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:The_Royal_Mile_and_St_Giles_Cathedral_at_night_-_21_March_2025.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/The_Royal_Mile_and_St_Giles_Cathedral_at_night_-_21_March_2025.jpg/1920px-The_Royal_Mile_and_St_Giles_Cathedral_at_night_-_21_March_2025.jpg" data-cap="De Royal Mile en St Giles&#x27; Cathedral bij nacht — foto Stinglehammer, CC BY-SA 4.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/The_Royal_Mile_and_St_Giles_Cathedral_at_night_-_21_March_2025.jpg/1920px-The_Royal_Mile_and_St_Giles_Cathedral_at_night_-_21_March_2025.jpg" alt="De Royal Mile en St Giles&#x27; Cathedral bij nacht" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> De Royal Mile en St Giles&#x27; Cathedral bij nacht <a href="https://commons.wikimedia.org/wiki/File:The_Royal_Mile_and_St_Giles_Cathedral_at_night_-_21_March_2025.jpg" target="_blank" rel="noopener">Stinglehammer · CC BY-SA 4.0 ↗</a></figcaption>
+      </figure>
+  <div class="scrollcue" aria-hidden="true"></div>
+</header>
+
+<div class="wrap">
+
+  <div class="toolbar">
+    <h2>Voor je op pad gaat</h2>
+    <p>Edinburgh is de stad waar de boeken zijn geschreven, en dat merk je op elke hoek. Sommige plekken zijn
+      zwart op wit gedocumenteerd, andere lijken er zó sprekend op dat ze inmiddels bij het verhaal horen. Allebei
+      zijn ze de wandeling waard — deze gids vertelt er alleen eerlijk bij wat je precies voor je ziet.</p>
+    <p>Zeker weten doen we dit: Rowling kwam in 1993 naar Edinburgh en schreef vroege hoofdstukken in
+      <strong>Nicolson&rsquo;s</strong>, het café waar haar zwager mede-eigenaar van was — ze heeft verteld dat ze
+      daar een compleet hoofdstuk in één zitting schreef. Ze maakte <em>Deathly Hallows</em> in januari 2007 af op
+      <strong>kamer 552 van het Balmoral</strong>, waar ze een marmeren buste van Hermes signeerde die er nog
+      steeds staat. En al in 1999 vertelde ze dat ze namen verzamelt van heiligen, plaatsnamen, oorlogsmonumenten
+      en grafstenen — wie daarna over Greyfriars loopt, leest de zerken vanzelf anders.</p>
+    <p>Over de Wegisweg is Rowling zelf duidelijk geweest: die kwam uit haar hoofd, niet van een bestaande straat.
+      Wat Victoria Street daarmee wordt, is misschien nog leuker — de straat die eruitziet zoals de Wegisweg in
+      ieders hoofd eruitziet, compleet met tovenaarswinkels die er echt zitten. Zo lees je de labels hieronder:
+      <strong>vaststaand</strong> (gedocumenteerd), <strong>aannemelijk</strong>, <strong>lijkt erop</strong>
+      (geen bewezen link, wél precies het juiste beeld), <strong>gewoon leuk</strong> (thema-adres om binnen te
+      lopen) en <strong>verdwenen</strong>.</p>
+    <p class="srcline">Achtergrond bij deze alinea:
+      <a href="https://news.stv.tv/east-central/jk-rowling-denies-harry-potter-connection-to-edinburghs-victoria-street-and-greyfriars-kirkyard" target="_blank" rel="noopener">STV News, 11 juli 2022</a> ·
+      <a href="https://x.com/jk_rowling/status/1545728876223266817" target="_blank" rel="noopener">Rowling op X</a> ·
+      <a href="https://www.edinburghexpert.com/blog/harry-potter-in-edinburgh-a-muggles-guide-to-the-inspirations-for-jk-rowlings-wizarding-world" target="_blank" rel="noopener">Edinburgh Expert</a></p>
+    <div class="filters" id="filters">
+      <button data-f="all" aria-pressed="true">Alles</button>
+      <button data-f="fact" aria-pressed="false">Vaststaand</button>
+      <button data-f="likely" aria-pressed="false">Aannemelijk</button>
+      <button data-f="myth" aria-pressed="false">Lijkt erop</button>
+      <button data-f="fun" aria-pressed="false">Gewoon leuk</button>
+      <span id="count"></span>
+    </div>
+    <p class="spellhint">Deze editie luistert naar spreuken: begin gewoon te typen. <b>lumos</b> (staflicht aan) · <b>nox</b> (weer uit) · <b>alohomora</b> · <b>accio kasteel</b> · <b>wingardium leviosa</b> · <b>expecto patronum</b> · <b>revelio</b></p>
+    <button id="routeBtn" aria-expanded="false">▸ &nbsp;WANDELROUTE</button>
+    <div id="routeBox"><ol id="routeList"></ol></div>
+  </div>
+
+
+  <section class="mapsection" id="kaart">
+    <div class="chapter-head">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#6d4f16" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 12 L18 8 L30 12 L42 8 V36 L30 40 L18 36 L6 40z" fill="rgba(168,127,44,.12)"/>
+        <path d="M18 8 V36"/><path d="M30 12 V40"/><circle cx="24" cy="22" r="3.5" fill="#7c1f27" stroke="none"/>
+      </svg>
+      <h2>De kaart</h2>
+    </div>
+    <p class="chapter-note">Alles van bovenaf. Klik op een medaillon om naar de plek in de gids te springen; de gestippelde lijn is de wandelroute in volgorde.</p>
+    <div class="rule"></div>
+    <figure class="mapplate">
+      <div class="mapframe">
+        <svg id="hpmap" viewBox="0 0 1100 1000" role="img" xmlns="http://www.w3.org/2000/svg"
+          aria-label="Kaart van Edinburgh van bovenaf met alle plekken uit deze gids">
+        <title>Het Edinburgh van Harry Potter — plattegrond</title>
+        <defs>
+          <linearGradient id="mp" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#faf2df"/><stop offset="55%" stop-color="#f2e7d0"/><stop offset="100%" stop-color="#e9dbbc"/></linearGradient>
+          <radialGradient id="mvig" cx="50%" cy="46%" r="72%"><stop offset="60%" stop-color="rgba(0,0,0,0)"/><stop offset="100%" stop-color="rgba(120,90,40,.20)"/></radialGradient>
+          <pattern id="mgrid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0 H0 V40" fill="none" stroke="#a87f2c" stroke-width=".5" opacity=".14"/></pattern>
+          <pattern id="mhatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="#155450" stroke-width="1" opacity=".35"/></pattern>
+          <pattern id="mrock" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)"><line x1="0" y1="0" x2="0" y2="9" stroke="#6d4f16" stroke-width="1" opacity=".3"/></pattern>
+        </defs>
+        <rect width="1100" height="1000" fill="url(#mp)"/>
+        <rect width="1100" height="1000" fill="url(#mgrid)"/>
+        <g><path d="M134.7 258.1 L372.7 217.7 L422.0 282.3 L390.6 354.8 L233.5 395.2 L107.8 362.9 Z" fill="#cfd6be" opacity=".75"/><path d="M134.7 258.1 L372.7 217.7 L422.0 282.3 L390.6 354.8 L233.5 395.2 L107.8 362.9 Z" fill="url(#mhatch)"/><path d="M134.7 258.1 L372.7 217.7 L422.0 282.3 L390.6 354.8 L233.5 395.2 L107.8 362.9 Z" fill="none" stroke="#5d6b4e" stroke-width="1.2" opacity=".7"/><title>Princes Street Gardens</title></g>
+        <g><path d="M381.6 871.0 L727.3 830.6 L754.3 1000.0 L368.2 1000.0 Z" fill="#cfd6be" opacity=".75"/><path d="M381.6 871.0 L727.3 830.6 L754.3 1000.0 L368.2 1000.0 Z" fill="url(#mhatch)"/><path d="M381.6 871.0 L727.3 830.6 L754.3 1000.0 L368.2 1000.0 Z" fill="none" stroke="#5d6b4e" stroke-width="1.2" opacity=".7"/><title>The Meadows</title></g>
+        <g><path d="M458.0 596.8 L520.8 596.8 L529.8 661.3 L462.4 661.3 Z" fill="#cfd6be" opacity=".75"/><path d="M458.0 596.8 L520.8 596.8 L529.8 661.3 L462.4 661.3 Z" fill="url(#mhatch)"/><path d="M458.0 596.8 L520.8 596.8 L529.8 661.3 L462.4 661.3 Z" fill="none" stroke="#5d6b4e" stroke-width="1.2" opacity=".7"/><title>Greyfriars Kirkyard</title></g>
+        <g><path d="M125.7 451.6 L251.4 475.8 L278.4 532.3 L197.6 564.5 L107.8 524.2 Z" fill="#e0cfa9"/><path d="M125.7 451.6 L251.4 475.8 L278.4 532.3 L197.6 564.5 L107.8 524.2 Z" fill="url(#mrock)"/><path d="M125.7 451.6 L251.4 475.8 L278.4 532.3 L197.6 564.5 L107.8 524.2 Z" fill="none" stroke="#8a6620" stroke-width="1.3"/><title>Castle Rock</title></g>
+        <g opacity=".8"><rect x="572.1" y="224.9" width="86" height="34" rx="3" fill="#e5d6b4" stroke="#8a6620" stroke-width="1.1"/><text x="615.1" y="245.9" text-anchor="middle" font-family="Cinzel, serif" font-size="12" fill="#6d4f16" letter-spacing="1.5">WAVERLEY</text><title>Waverley Station</title></g>
+        <g fill="none" stroke="#c9ab72" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M197.6 500.0 L305.3 475.8 L395.1 451.6 L502.9 411.3 L606.1 371.0 L718.4 338.7 L830.6 298.4 L942.9 258.1 L1050.6 217.7" stroke-width="18"/>
+          <path d="M22.4 338.7 L224.5 282.3 L404.1 233.9 L561.2 193.5 L673.5 161.3 L763.3 137.1" stroke-width="18"/>
+          <path d="M642.0 371.0 L682.4 467.7 L718.4 564.5 L772.2 645.2 L808.2 750.0 L844.1 871.0 L871.0 967.7" stroke-width="16"/>
+          <path d="M498.4 419.4 L534.3 500.0 L574.7 580.6 L606.1 629.0" stroke-width="15"/>
+          <path d="M431.0 411.3 L413.1 346.8 L395.1 282.3 L390.6 233.9" stroke-width="15"/>
+          <path d="M377.1 588.7 L538.8 604.8 L695.9 612.9 L830.6 596.8 L942.9 564.5" stroke-width="14"/>
+          <path d="M246.9 564.5 L381.6 572.6" stroke-width="17"/>
+          <path d="M498.4 467.7 L449.0 500.0 L404.1 540.3 L377.1 564.5" stroke-width="14"/>
+          <path d="M597.1 629.0 L695.9 637.1 L754.3 645.2" stroke-width="13"/>
+          <path d="M458.0 612.9 L498.4 637.1 L561.2 629.0" stroke-width="12"/>
+          <path d="M606.1 629.0 L651.0 677.4 L700.4 717.7" stroke-width="12"/>
+          <path d="M291.8 725.8 L449.0 717.7 L561.2 701.6" stroke-width="13"/>
+          <path d="M642.0 371.0 L642.0 290.3 L637.6 209.7" stroke-width="15"/>
+          <path d="M22.4 629.0 L35.9 508.1 L53.9 371.0 L67.3 322.6" stroke-width="15"/>
+          <path d="M67.3 121.0 L336.7 88.7 L606.1 56.5 L740.8 40.3" stroke-width="15"/>
+          <path d="M260.4 96.8 L273.9 209.7" stroke-width="13"/>
+          <path d="M224.5 516.1 L323.3 540.3 L404.1 532.3" stroke-width="12"/>
+          <path d="M844.1 871.0 L871.0 967.7" stroke-width="14"/>
+        </g>
+        <g fill="none" stroke="#fbf5e6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M197.6 500.0 L305.3 475.8 L395.1 451.6 L502.9 411.3 L606.1 371.0 L718.4 338.7 L830.6 298.4 L942.9 258.1 L1050.6 217.7" stroke-width="13"><title>De Royal Mile</title></path>
+          <path d="M22.4 338.7 L224.5 282.3 L404.1 233.9 L561.2 193.5 L673.5 161.3 L763.3 137.1" stroke-width="13"><title>Princes Street</title></path>
+          <path d="M642.0 371.0 L682.4 467.7 L718.4 564.5 L772.2 645.2 L808.2 750.0 L844.1 871.0 L871.0 967.7" stroke-width="11"><title>South Bridge · Nicolson Street</title></path>
+          <path d="M498.4 419.4 L534.3 500.0 L574.7 580.6 L606.1 629.0" stroke-width="10"><title>George IV Bridge</title></path>
+          <path d="M431.0 411.3 L413.1 346.8 L395.1 282.3 L390.6 233.9" stroke-width="10"><title>The Mound</title></path>
+          <path d="M377.1 588.7 L538.8 604.8 L695.9 612.9 L830.6 596.8 L942.9 564.5" stroke-width="9"><title>Cowgate</title></path>
+          <path d="M246.9 564.5 L381.6 572.6" stroke-width="12"><title>Grassmarket</title></path>
+          <path d="M498.4 467.7 L449.0 500.0 L404.1 540.3 L377.1 564.5" stroke-width="9"><title>Victoria Street</title></path>
+          <path d="M597.1 629.0 L695.9 637.1 L754.3 645.2" stroke-width="8"><title>Chambers Street</title></path>
+          <path d="M458.0 612.9 L498.4 637.1 L561.2 629.0" stroke-width="7"><title>Candlemaker Row</title></path>
+          <path d="M606.1 629.0 L651.0 677.4 L700.4 717.7" stroke-width="7"><title>Forrest Road</title></path>
+          <path d="M291.8 725.8 L449.0 717.7 L561.2 701.6" stroke-width="8"><title>Lauriston Place</title></path>
+          <path d="M642.0 371.0 L642.0 290.3 L637.6 209.7" stroke-width="10"><title>North Bridge</title></path>
+          <path d="M22.4 629.0 L35.9 508.1 L53.9 371.0 L67.3 322.6" stroke-width="10"><title>Lothian Road</title></path>
+          <path d="M67.3 121.0 L336.7 88.7 L606.1 56.5 L740.8 40.3" stroke-width="10"><title>George Street</title></path>
+          <path d="M260.4 96.8 L273.9 209.7" stroke-width="8"><title>Frederick Street</title></path>
+          <path d="M224.5 516.1 L323.3 540.3 L404.1 532.3" stroke-width="7"><title>Johnston Terrace</title></path>
+          <path d="M844.1 871.0 L871.0 967.7" stroke-width="9"><title>Clerk Street</title></path>
+        </g>
+        <g font-family="Cinzel, serif" font-size="13" fill="#8a6620" letter-spacing="2.4" opacity=".95">
+          <path id="mrm" fill="none" d="M197.6 500.0 L305.3 475.8 L395.1 451.6 L502.9 411.3 L606.1 371.0 L718.4 338.7 L830.6 298.4 L942.9 258.1 L1050.6 217.7"/>
+          <text><textPath href="#mrm" startOffset="34%">THE ROYAL MILE</textPath></text>
+          <path id="mps" fill="none" d="M22.4 338.7 L224.5 282.3 L404.1 233.9 L561.2 193.5 L673.5 161.3 L763.3 137.1"/>
+          <text><textPath href="#mps" startOffset="30%">PRINCES STREET</textPath></text>
+          <path id="mgm" fill="none" d="M246.9 564.5 L381.6 572.6"/>
+          <text><textPath href="#mgm" startOffset="8%">GRASSMARKET</textPath></text>
+          <path id="mcw" fill="none" d="M377.1 588.7 L538.8 604.8 L695.9 612.9 L830.6 596.8 L942.9 564.5"/>
+          <text><textPath href="#mcw" startOffset="46%">COWGATE</textPath></text>
+        </g>
+        <path id="mroute" d="M660.0 169.4 L642.0 362.9 L588.2 354.8 L624.1 387.1 L435.5 435.5 L390.6 459.7 L184.1 500.0 L309.8 483.9 L466.9 491.9 L422.0 516.1 L390.6 532.3 L305.3 572.6 L489.4 629.0 L422.0 717.7 L552.2 564.5 L646.5 629.0 L794.7 669.4 L731.8 717.7 L408.6 395.2 L736.3 403.2 L758.8 419.4 L857.6 903.2" fill="none" stroke="#7c1f27" stroke-width="3.4" stroke-opacity=".65" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 11"/>
+        <g id="mfeet" aria-hidden="true"></g>
+<g id="mmarks">
+          <g class="mk" data-for="balmoral" data-cat="fact" tabindex="0" role="link" aria-label="The Balmoral, kamer 552 — ga naar de beschrijving" style="--d:60ms">
+            <circle class="halo" cx="660.0" cy="169.4" r="20" fill="#155450" opacity="0"/>
+            <circle cx="660.0" cy="169.4" r="14.5" fill="#faf2df" stroke="#155450" stroke-width="3"/>
+            <circle cx="660.0" cy="169.4" r="10" fill="none" stroke="#155450" stroke-width=".8" opacity=".55"/>
+            <text x="660.0" y="174.0" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#155450">1</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="356.4" y="154.4" width="283.6" height="30" rx="2" fill="#faf2df" stroke="#155450" stroke-width="1.2"/>
+              <text x="498.2" y="174.9" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">The Balmoral, kamer 552</text>
+            </g>
+            <title>The Balmoral, kamer 552</title>
+          </g>
+          <g class="mk" data-for="chambers" data-cat="fact" tabindex="0" role="link" aria-label="Handafdrukken City Chambers — ga naar de beschrijving" style="--d:105ms">
+            <circle class="halo" cx="642.0" cy="362.9" r="20" fill="#155450" opacity="0"/>
+            <circle cx="642.0" cy="362.9" r="14.5" fill="#faf2df" stroke="#155450" stroke-width="3"/>
+            <circle cx="642.0" cy="362.9" r="10" fill="none" stroke="#155450" stroke-width=".8" opacity=".55"/>
+            <text x="642.0" y="367.5" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#155450">2</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="662.0" y="347.9" width="328.4" height="30" rx="2" fill="#faf2df" stroke="#155450" stroke-width="1.2"/>
+              <text x="826.2" y="368.4" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">Handafdrukken City Chambers</text>
+            </g>
+            <title>Handafdrukken City Chambers</title>
+          </g>
+          <g class="mk" data-for="cockburn" data-cat="myth" tabindex="0" role="link" aria-label="Cockburn Street — ga naar de beschrijving" style="--d:150ms">
+            <circle class="halo" cx="588.2" cy="354.8" r="20" fill="#7c1f27" opacity="0"/>
+            <circle cx="588.2" cy="354.8" r="14.5" fill="#faf2df" stroke="#7c1f27" stroke-width="3"/>
+            <circle cx="588.2" cy="354.8" r="10" fill="none" stroke="#7c1f27" stroke-width=".8" opacity=".55"/>
+            <text x="588.2" y="359.40000000000003" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#7c1f27">3</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="374.2" y="339.8" width="194.0" height="30" rx="2" fill="#faf2df" stroke="#7c1f27" stroke-width="1.2"/>
+              <text x="471.2" y="360.3" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">Cockburn Street</text>
+            </g>
+            <title>Cockburn Street</title>
+          </g>
+          <g class="mk" data-for="minalima" data-cat="fun" tabindex="0" role="link" aria-label="House of MinaLima — ga naar de beschrijving" style="--d:195ms">
+            <circle class="halo" cx="624.1" cy="387.1" r="20" fill="#2b3a6b" opacity="0"/>
+            <circle cx="624.1" cy="387.1" r="14.5" fill="#faf2df" stroke="#2b3a6b" stroke-width="3"/>
+            <circle cx="624.1" cy="387.1" r="10" fill="none" stroke="#2b3a6b" stroke-width=".8" opacity=".55"/>
+            <text x="624.1" y="391.70000000000005" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#2b3a6b">4</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="644.1" y="372.1" width="216.4" height="30" rx="2" fill="#faf2df" stroke="#2b3a6b" stroke-width="1.2"/>
+              <text x="752.3" y="392.6" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">House of MinaLima</text>
+            </g>
+            <title>House of MinaLima</title>
+          </g>
+          <g class="mk" data-for="writers" data-cat="fact" tabindex="0" role="link" aria-label="The Writers&#x27; Museum — ga naar de beschrijving" style="--d:240ms">
+            <circle class="halo" cx="435.5" cy="435.5" r="20" fill="#155450" opacity="0"/>
+            <circle cx="435.5" cy="435.5" r="14.5" fill="#faf2df" stroke="#155450" stroke-width="3"/>
+            <circle cx="435.5" cy="435.5" r="10" fill="none" stroke="#155450" stroke-width=".8" opacity=".55"/>
+            <text x="435.5" y="440.1" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#155450">4</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="176.7" y="420.5" width="238.8" height="30" rx="2" fill="#faf2df" stroke="#155450" stroke-width="1.2"/>
+              <text x="296.1" y="441.0" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">The Writers&#x27; Museum</text>
+            </g>
+            <title>The Writers&#x27; Museum</title>
+          </g>
+          <g class="mk" data-for="riddles" data-cat="myth" tabindex="0" role="link" aria-label="Riddle&#x27;s Court — ga naar de beschrijving" style="--d:285ms">
+            <circle class="halo" cx="390.6" cy="459.7" r="20" fill="#7c1f27" opacity="0"/>
+            <circle cx="390.6" cy="459.7" r="14.5" fill="#faf2df" stroke="#7c1f27" stroke-width="3"/>
+            <circle cx="390.6" cy="459.7" r="10" fill="none" stroke="#7c1f27" stroke-width=".8" opacity=".55"/>
+            <text x="390.6" y="464.3" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#7c1f27">5</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="187.8" y="444.7" width="182.8" height="30" rx="2" fill="#faf2df" stroke="#7c1f27" stroke-width="1.2"/>
+              <text x="279.2" y="465.2" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">Riddle&#x27;s Court</text>
+            </g>
+            <title>Riddle&#x27;s Court</title>
+          </g>
+          <g class="mk" data-for="castle" data-cat="myth" tabindex="0" role="link" aria-label="Edinburgh Castle — ga naar de beschrijving" style="--d:330ms">
+            <circle class="halo" cx="184.1" cy="500.0" r="20" fill="#7c1f27" opacity="0"/>
+            <circle cx="184.1" cy="500.0" r="14.5" fill="#faf2df" stroke="#7c1f27" stroke-width="3"/>
+            <circle cx="184.1" cy="500.0" r="10" fill="none" stroke="#7c1f27" stroke-width=".8" opacity=".55"/>
+            <text x="184.1" y="504.6" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#7c1f27">6</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="204.1" y="485.0" width="205.2" height="30" rx="2" fill="#faf2df" stroke="#7c1f27" stroke-width="1.2"/>
+              <text x="306.7" y="505.5" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">Edinburgh Castle</text>
+            </g>
+            <title>Edinburgh Castle</title>
+          </g>
+          <g class="mk" data-for="witches" data-cat="likely" tabindex="0" role="link" aria-label="The Witches&#x27; Well — ga naar de beschrijving" style="--d:375ms">
+            <circle class="halo" cx="309.8" cy="483.9" r="20" fill="#8a6620" opacity="0"/>
+            <circle cx="309.8" cy="483.9" r="14.5" fill="#faf2df" stroke="#8a6620" stroke-width="3"/>
+            <circle cx="309.8" cy="483.9" r="10" fill="none" stroke="#8a6620" stroke-width=".8" opacity=".55"/>
+            <text x="309.8" y="488.5" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#8a6620">7</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="329.8" y="468.9" width="216.4" height="30" rx="2" fill="#faf2df" stroke="#8a6620" stroke-width="1.2"/>
+              <text x="438.0" y="489.4" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">The Witches&#x27; Well</text>
+            </g>
+            <title>The Witches&#x27; Well</title>
+          </g>
+          <g class="mk" data-for="victoria" data-cat="myth" tabindex="0" role="link" aria-label="Victoria Street &amp; West Bow — ga naar de beschrijving" style="--d:420ms">
+            <circle class="halo" cx="466.9" cy="491.9" r="20" fill="#7c1f27" opacity="0"/>
+            <circle cx="466.9" cy="491.9" r="14.5" fill="#faf2df" stroke="#7c1f27" stroke-width="3"/>
+            <circle cx="466.9" cy="491.9" r="10" fill="none" stroke="#7c1f27" stroke-width=".8" opacity=".55"/>
+            <text x="466.9" y="496.5" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#7c1f27">8</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="486.9" y="476.9" width="317.2" height="30" rx="2" fill="#faf2df" stroke="#7c1f27" stroke-width="1.2"/>
+              <text x="645.5" y="497.4" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">Victoria Street &amp; West Bow</text>
+            </g>
+            <title>Victoria Street &amp; West Bow</title>
+          </g>
+          <g class="mk" data-for="museumcontext" data-cat="fun" tabindex="0" role="link" aria-label="Museum Context — ga naar de beschrijving" style="--d:465ms">
+            <circle class="halo" cx="422.0" cy="516.1" r="20" fill="#2b3a6b" opacity="0"/>
+            <circle cx="422.0" cy="516.1" r="14.5" fill="#faf2df" stroke="#2b3a6b" stroke-width="3"/>
+            <circle cx="422.0" cy="516.1" r="10" fill="none" stroke="#2b3a6b" stroke-width=".8" opacity=".55"/>
+            <text x="422.0" y="520.7" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#2b3a6b">9</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="219.2" y="501.1" width="182.8" height="30" rx="2" fill="#faf2df" stroke="#2b3a6b" stroke-width="1.2"/>
+              <text x="310.6" y="521.6" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">Museum Context</text>
+            </g>
+            <title>Museum Context</title>
+          </g>
+          <g class="mk" data-for="galaxy" data-cat="fun" tabindex="0" role="link" aria-label="The Enchanted Galaxy — ga naar de beschrijving" style="--d:510ms">
+            <circle class="halo" cx="390.6" cy="532.3" r="20" fill="#2b3a6b" opacity="0"/>
+            <circle cx="390.6" cy="532.3" r="14.5" fill="#faf2df" stroke="#2b3a6b" stroke-width="3"/>
+            <circle cx="390.6" cy="532.3" r="10" fill="none" stroke="#2b3a6b" stroke-width=".8" opacity=".55"/>
+            <text x="390.6" y="536.9" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#2b3a6b">10</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="120.6" y="517.3" width="250.0" height="30" rx="2" fill="#faf2df" stroke="#2b3a6b" stroke-width="1.2"/>
+              <text x="245.6" y="537.8" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">The Enchanted Galaxy</text>
+            </g>
+            <title>The Enchanted Galaxy</title>
+          </g>
+          <g class="mk" data-for="grassmarket" data-cat="myth" tabindex="0" role="link" aria-label="Grassmarket — ga naar de beschrijving" style="--d:555ms">
+            <circle class="halo" cx="305.3" cy="572.6" r="20" fill="#7c1f27" opacity="0"/>
+            <circle cx="305.3" cy="572.6" r="14.5" fill="#faf2df" stroke="#7c1f27" stroke-width="3"/>
+            <circle cx="305.3" cy="572.6" r="10" fill="none" stroke="#7c1f27" stroke-width=".8" opacity=".55"/>
+            <text x="305.3" y="577.2" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#7c1f27">11</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="136.1" y="557.6" width="149.2" height="30" rx="2" fill="#faf2df" stroke="#7c1f27" stroke-width="1.2"/>
+              <text x="210.7" y="578.1" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">Grassmarket</text>
+            </g>
+            <title>Grassmarket</title>
+          </g>
+          <g class="mk" data-for="greyfriars" data-cat="likely" tabindex="0" role="link" aria-label="Greyfriars Kirkyard — ga naar de beschrijving" style="--d:600ms">
+            <circle class="halo" cx="489.4" cy="629.0" r="20" fill="#8a6620" opacity="0"/>
+            <circle cx="489.4" cy="629.0" r="14.5" fill="#faf2df" stroke="#8a6620" stroke-width="3"/>
+            <circle cx="489.4" cy="629.0" r="10" fill="none" stroke="#8a6620" stroke-width=".8" opacity=".55"/>
+            <text x="489.4" y="633.6" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#8a6620">12</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="230.6" y="614.0" width="238.8" height="30" rx="2" fill="#faf2df" stroke="#8a6620" stroke-width="1.2"/>
+              <text x="350.0" y="634.5" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">Greyfriars Kirkyard</text>
+            </g>
+            <title>Greyfriars Kirkyard</title>
+          </g>
+          <g class="mk" data-for="heriots" data-cat="likely" tabindex="0" role="link" aria-label="George Heriot&#x27;s School — ga naar de beschrijving" style="--d:645ms">
+            <circle class="halo" cx="422.0" cy="717.7" r="20" fill="#8a6620" opacity="0"/>
+            <circle cx="422.0" cy="717.7" r="14.5" fill="#faf2df" stroke="#8a6620" stroke-width="3"/>
+            <circle cx="422.0" cy="717.7" r="10" fill="none" stroke="#8a6620" stroke-width=".8" opacity=".55"/>
+            <text x="422.0" y="722.3000000000001" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#8a6620">13</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="129.6" y="702.7" width="272.4" height="30" rx="2" fill="#faf2df" stroke="#8a6620" stroke-width="1.2"/>
+              <text x="265.8" y="723.2" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">George Heriot&#x27;s School</text>
+            </g>
+            <title>George Heriot&#x27;s School</title>
+          </g>
+          <g class="mk" data-for="elephant" data-cat="fact" tabindex="0" role="link" aria-label="The Elephant House — ga naar de beschrijving" style="--d:690ms">
+            <circle class="halo" cx="552.2" cy="564.5" r="20" fill="#155450" opacity="0"/>
+            <circle cx="552.2" cy="564.5" r="14.5" fill="#faf2df" stroke="#155450" stroke-width="3"/>
+            <circle cx="552.2" cy="564.5" r="10" fill="none" stroke="#155450" stroke-width=".8" opacity=".55"/>
+            <text x="552.2" y="569.1" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#155450">14</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="572.2" y="549.5" width="227.6" height="30" rx="2" fill="#faf2df" stroke="#155450" stroke-width="1.2"/>
+              <text x="686.0" y="570.0" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">The Elephant House</text>
+            </g>
+            <title>The Elephant House</title>
+          </g>
+          <g class="mk" data-for="nms" data-cat="myth" tabindex="0" role="link" aria-label="National Museum of Scotland — ga naar de beschrijving" style="--d:735ms">
+            <circle class="halo" cx="646.5" cy="629.0" r="20" fill="#7c1f27" opacity="0"/>
+            <circle cx="646.5" cy="629.0" r="14.5" fill="#faf2df" stroke="#7c1f27" stroke-width="3"/>
+            <circle cx="646.5" cy="629.0" r="10" fill="none" stroke="#7c1f27" stroke-width=".8" opacity=".55"/>
+            <text x="646.5" y="633.6" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#7c1f27">15</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="666.5" y="614.0" width="328.4" height="30" rx="2" fill="#faf2df" stroke="#7c1f27" stroke-width="1.2"/>
+              <text x="830.7" y="634.5" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">National Museum of Scotland</text>
+            </g>
+            <title>National Museum of Scotland</title>
+          </g>
+          <g class="mk" data-for="nicolsons" data-cat="fact" tabindex="0" role="link" aria-label="Nicolson&#x27;s Café — ga naar de beschrijving" style="--d:780ms">
+            <circle class="halo" cx="794.7" cy="669.4" r="20" fill="#155450" opacity="0"/>
+            <circle cx="794.7" cy="669.4" r="14.5" fill="#faf2df" stroke="#155450" stroke-width="3"/>
+            <circle cx="794.7" cy="669.4" r="10" fill="none" stroke="#155450" stroke-width=".8" opacity=".55"/>
+            <text x="794.7" y="674.0" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#155450">16</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="814.7" y="654.4" width="194.0" height="30" rx="2" fill="#faf2df" stroke="#155450" stroke-width="1.2"/>
+              <text x="911.7" y="674.9" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">Nicolson&#x27;s Café</text>
+            </g>
+            <title>Nicolson&#x27;s Café</title>
+          </g>
+          <g class="mk" data-for="potterrow" data-cat="myth" tabindex="0" role="link" aria-label="Potterrow — ga naar de beschrijving" style="--d:825ms">
+            <circle class="halo" cx="731.8" cy="717.7" r="20" fill="#7c1f27" opacity="0"/>
+            <circle cx="731.8" cy="717.7" r="14.5" fill="#faf2df" stroke="#7c1f27" stroke-width="3"/>
+            <circle cx="731.8" cy="717.7" r="10" fill="none" stroke="#7c1f27" stroke-width=".8" opacity=".55"/>
+            <text x="731.8" y="722.3000000000001" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#7c1f27">17</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="751.8" y="702.7" width="126.8" height="30" rx="2" fill="#faf2df" stroke="#7c1f27" stroke-width="1.2"/>
+              <text x="815.2" y="723.2" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">Potterrow</text>
+            </g>
+            <title>Potterrow</title>
+          </g>
+          <g class="mk" data-for="bank" data-cat="myth" tabindex="0" role="link" aria-label="Bank of Scotland &amp; Old College — ga naar de beschrijving" style="--d:870ms">
+            <circle class="halo" cx="408.6" cy="395.2" r="20" fill="#7c1f27" opacity="0"/>
+            <circle cx="408.6" cy="395.2" r="14.5" fill="#faf2df" stroke="#7c1f27" stroke-width="3"/>
+            <circle cx="408.6" cy="395.2" r="10" fill="none" stroke="#7c1f27" stroke-width=".8" opacity=".55"/>
+            <text x="408.6" y="399.8" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#7c1f27">18</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="26.6" y="380.2" width="362.0" height="30" rx="2" fill="#faf2df" stroke="#7c1f27" stroke-width="1.2"/>
+              <text x="207.6" y="400.7" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">Bank of Scotland &amp; Old College</text>
+            </g>
+            <title>Bank of Scotland &amp; Old College</title>
+          </g>
+          <g class="mk" data-for="dom" data-cat="fun" tabindex="0" role="link" aria-label="Department of Magic — ga naar de beschrijving" style="--d:915ms">
+            <circle class="halo" cx="736.3" cy="403.2" r="20" fill="#2b3a6b" opacity="0"/>
+            <circle cx="736.3" cy="403.2" r="14.5" fill="#faf2df" stroke="#2b3a6b" stroke-width="3"/>
+            <circle cx="736.3" cy="403.2" r="10" fill="none" stroke="#2b3a6b" stroke-width=".8" opacity=".55"/>
+            <text x="736.3" y="407.8" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#2b3a6b">19</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="756.3" y="388.2" width="238.8" height="30" rx="2" fill="#faf2df" stroke="#2b3a6b" stroke-width="1.2"/>
+              <text x="875.7" y="408.7" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">Department of Magic</text>
+            </g>
+            <title>Department of Magic</title>
+          </g>
+          <g class="mk" data-for="potions" data-cat="fun" tabindex="0" role="link" aria-label="Magic Potions Tavern — ga naar de beschrijving" style="--d:960ms">
+            <circle class="halo" cx="758.8" cy="419.4" r="20" fill="#2b3a6b" opacity="0"/>
+            <circle cx="758.8" cy="419.4" r="14.5" fill="#faf2df" stroke="#2b3a6b" stroke-width="3"/>
+            <circle cx="758.8" cy="419.4" r="10" fill="none" stroke="#2b3a6b" stroke-width=".8" opacity=".55"/>
+            <text x="758.8" y="424.0" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#2b3a6b">20</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="778.8" y="404.4" width="250.0" height="30" rx="2" fill="#faf2df" stroke="#2b3a6b" stroke-width="1.2"/>
+              <text x="903.8" y="424.9" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">Magic Potions Tavern</text>
+            </g>
+            <title>Magic Potions Tavern</title>
+          </g>
+          <g class="mk" data-for="doghouse" data-cat="fun" tabindex="0" role="link" aria-label="The Dog House — ga naar de beschrijving" style="--d:1005ms">
+            <circle class="halo" cx="857.6" cy="903.2" r="20" fill="#2b3a6b" opacity="0"/>
+            <circle cx="857.6" cy="903.2" r="14.5" fill="#faf2df" stroke="#2b3a6b" stroke-width="3"/>
+            <circle cx="857.6" cy="903.2" r="10" fill="none" stroke="#2b3a6b" stroke-width=".8" opacity=".55"/>
+            <text x="857.6" y="907.8000000000001" text-anchor="middle" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#2b3a6b">21</text>
+            <g class="lbl" pointer-events="none">
+              <rect x="877.6" y="888.2" width="171.6" height="30" rx="2" fill="#faf2df" stroke="#2b3a6b" stroke-width="1.2"/>
+              <text x="963.4" y="908.7" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="16" fill="#231a11">The Dog House</text>
+            </g>
+            <title>The Dog House</title>
+          </g>
+        </g>
+        <g id="mcart"><rect x="34" y="34" width="404" height="118" fill="#faf2df" fill-opacity=".93" stroke="#a87f2c" stroke-width="2"/><rect x="41" y="41" width="390" height="104" fill="none" stroke="#a87f2c" stroke-width=".9" opacity=".6"/>
+        <text x="236" y="80" text-anchor="middle" font-family="Cinzel Decorative, serif" font-size="26" font-weight="900" fill="#7c1f27">OLD TOWN &amp; NEW TOWN</text>
+        <text x="236" y="108" text-anchor="middle" font-family="Cinzel, serif" font-size="12.5" fill="#8a6620" letter-spacing="3.4">EDINBURGH · DE 22 PLEKKEN</text>
+        <text x="236" y="132" text-anchor="middle" font-family="EB Garamond, serif" font-size="14" font-style="italic" fill="#54432f">op ware ligging getekend, vereenvoudigd</text></g>
+        <g id="mcomp" opacity=".9"><circle cx="992" cy="118" r="58" fill="#faf2df" fill-opacity=".85" stroke="#a87f2c" stroke-width="1.6"/><circle cx="992" cy="118" r="48" fill="none" stroke="#a87f2c" stroke-width=".8" opacity=".6"/>
+          <text x="992.0" y="82.5" text-anchor="middle" font-family="Cinzel, serif" font-size="13" fill="#8a6620">N</text>
+          <text x="1032.0" y="122.5" text-anchor="middle" font-family="Cinzel, serif" font-size="13" fill="#8a6620">O</text>
+          <text x="992.0" y="162.5" text-anchor="middle" font-family="Cinzel, serif" font-size="13" fill="#8a6620">Z</text>
+          <text x="952.0" y="122.5" text-anchor="middle" font-family="Cinzel, serif" font-size="13" fill="#8a6620">W</text>
+          <path d="M992 80 L981 118 L1003 118 Z" fill="#7c1f27"/>
+          <path d="M992 156 L981 118 L1003 118 Z" fill="#a87f2c" opacity=".75"/>
+          <circle cx="992" cy="118" r="4" fill="#faf2df" stroke="#7c1f27" stroke-width="1.6"/></g>
+        <g id="mscale" font-family="Cinzel, serif" font-size="12" fill="#6d4f16">
+          <rect x="46.0" y="948.0" width="90.0" height="9" fill="#6d4f16"/>
+          <rect x="136.0" y="948.0" width="90.0" height="9" fill="none" stroke="#6d4f16" stroke-width="1.4"/>
+          <text x="46.0" y="941.0">0</text><text x="226.1" y="941.0" text-anchor="end">250 m</text></g>
+        <g id="mleg"><rect x="850" y="832" width="216" height="128" fill="#faf2df" fill-opacity=".93" stroke="#a87f2c" stroke-width="1.4"/>
+        <text x="866" y="858" font-family="Cinzel, serif" font-size="12" fill="#7c1f27" letter-spacing="2.2">LEGENDA</text>
+          <circle cx="874" cy="876" r="6.5" fill="#faf2df" stroke="#155450" stroke-width="2.6"/>
+          <text x="890" y="880" font-family="EB Garamond, serif" font-size="15" fill="#54432f">vaststaand</text>
+          <circle cx="874" cy="897" r="6.5" fill="#faf2df" stroke="#8a6620" stroke-width="2.6"/>
+          <text x="890" y="901" font-family="EB Garamond, serif" font-size="15" fill="#54432f">aannemelijk</text>
+          <circle cx="874" cy="918" r="6.5" fill="#faf2df" stroke="#7c1f27" stroke-width="2.6"/>
+          <text x="890" y="922" font-family="EB Garamond, serif" font-size="15" fill="#54432f">lijkt erop</text>
+          <circle cx="874" cy="939" r="6.5" fill="#faf2df" stroke="#2b3a6b" stroke-width="2.6"/>
+          <text x="890" y="943" font-family="EB Garamond, serif" font-size="15" fill="#54432f">gewoon leuk</text>
+        </g>
+        <rect width="1100" height="1000" fill="url(#mvig)" pointer-events="none"/>
+        <rect x="10" y="10" width="1080" height="980" fill="none" stroke="#a87f2c" stroke-width="3" pointer-events="none"/>
+        <rect x="20" y="20" width="1060" height="960" fill="none" stroke="#a87f2c" stroke-width="1" opacity=".7" pointer-events="none"/>
+        <path d="M0 0 h46 q-46 0 -46 46 v46" fill="none" stroke="#a87f2c" stroke-width="1.6" transform="translate(10 10) scale(1 1)" opacity=".85"/>
+        <path d="M0 0 h46 q-46 0 -46 46 v46" fill="none" stroke="#a87f2c" stroke-width="1.6" transform="translate(1090 10) scale(-1 1)" opacity=".85"/>
+        <path d="M0 0 h46 q-46 0 -46 46 v46" fill="none" stroke="#a87f2c" stroke-width="1.6" transform="translate(10 990) scale(1 -1)" opacity=".85"/>
+        <path d="M0 0 h46 q-46 0 -46 46 v46" fill="none" stroke="#a87f2c" stroke-width="1.6" transform="translate(1090 990) scale(-1 -1)" opacity=".85"/>
+        </svg>
+      </div>
+      <p class="mapnote">Tik op een medaillon om naar die plek te springen — of spreek de bezwering uit en de kaart rolt open op je hele scherm.</p>
+      <div class="maraudbar">
+        <button type="button" id="maraudOn">I solemnly swear that I am up to no good</button>
+        <button type="button" id="maraudOff" hidden>Mischief managed!</button>
+      </div>
+      <figcaption><b>Plattegrond</b> Old Town en New Town, met de 22 stops van de wandelroute · getekend op ware ligging, vereenvoudigd</figcaption>
+    </figure>
+  </section>
+
+  <!-- I -->
+  <section class="chapter" id="ch1" data-num="I" data-title="Waar het geschreven is">
+    <figure class="chapter-banner" data-px>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Old_town_moon_01.jpg/1920px-Old_town_moon_01.jpg" alt="De Old Town onder de maan" loading="lazy" decoding="async">
+      <span class="veil"></span>
+      <span class="btitle"><span>I</span></span>
+      <figcaption class="bcap">De Old Town onder de maan — <a href="https://commons.wikimedia.org/wiki/File:Old_town_moon_01.jpg" target="_blank" rel="noopener">Ad Meskens, CC BY-SA 3.0</a></figcaption>
+    </figure>
+
+    <div class="chapter-head">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#e2b53f" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M12 40 L34 12 c3-4 8 1 4 4 L14 42 l-6 2z" fill="rgba(226,181,63,.12)"/><path d="M8 44 h32"/>
+      </svg>
+      <h2>I. Waar het geschreven is</h2>
+    </div>
+    <p class="chapter-note">Rowling kwam in 1993 naar Edinburgh met drie hoofdstukken in haar tas.</p>
+    <div class="rule"></div>
+
+    <article class="entry" id="nicolsons" data-cat="fact" data-route="17" data-name="Nicolson's Café">
+      <span class="stepno"></span><span class="badge b-fact">VASTSTAAND</span>
+      <h3>Nicolson's Café</h3>
+      <p>Het écht belangrijke café. Rowlings zwager was mede-eigenaar; ze schreef hier vroege hoofdstukken en heeft zelf gezegd dat ze er een compleet hoofdstuk in één zitting schreef. De ingang zit naast Black Medicine Coffee, één trap omhoog. Op de zijmuur hangt een plaquette.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> 6a Nicolson Street, EH8 9DH · was later Spoon, inmiddels een restaurant</p>
+    </article>
+
+    <article class="entry" id="elephant" data-cat="fact" data-route="15" data-name="The Elephant House">
+      <span class="stepno"></span><span class="badge b-fact">VASTSTAAND</span>
+      <h3>The Elephant House</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Elephant_House_Front,_Edinburgh,_Scotland.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/c/c1/Elephant_House_Front%2C_Edinburgh%2C_Scotland.jpg" data-cap="De voorgevel van The Elephant House — foto Ken Eckert, CC BY-SA 4.0"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Elephant_House_Front%2C_Edinburgh%2C_Scotland.jpg" alt="De voorgevel van The Elephant House" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> De voorgevel van The Elephant House <a href="https://commons.wikimedia.org/wiki/File:Elephant_House_Front,_Edinburgh,_Scotland.jpg" target="_blank" rel="noopener">Ken Eckert · CC BY-SA 4.0 ↗</a></figcaption>
+      </figure>
+      <figure class="scene">
+        <svg viewBox="0 0 600 190" role="img" aria-label="Tekening van de rode gevel van The Elephant House">
+          <rect width="600" height="190" fill="#140d2e"/>
+          <rect x="60" y="30" width="480" height="160" fill="#7d1f24" stroke="#e2b53f" stroke-width="1.5"/>
+          <rect x="60" y="30" width="480" height="34" fill="#5e161b"/>
+          <text x="300" y="54" text-anchor="middle" font-family="Cinzel, serif" font-size="19" fill="#f0d17a" letter-spacing="3">THE ELEPHANT HOUSE</text>
+          <g stroke="#e2b53f" stroke-width="1.2" fill="#2a1a4a">
+            <rect x="90" y="86" width="96" height="80"/><rect x="252" y="86" width="96" height="80"/><rect x="414" y="86" width="96" height="80"/>
+          </g>
+          <g class="lit" fill="#ffcf5c" opacity=".8">
+            <rect x="96" y="92" width="84" height="68"/><rect x="258" y="92" width="84" height="68"/><rect x="420" y="92" width="84" height="68"/>
+          </g>
+          <g stroke="#7d1f24" stroke-width="3">
+            <line x1="138" y1="86" x2="138" y2="166"/><line x1="300" y1="86" x2="300" y2="166"/><line x1="462" y1="86" x2="462" y2="166"/>
+            <line x1="90" y1="126" x2="186" y2="126"/><line x1="252" y1="126" x2="348" y2="126"/><line x1="414" y1="126" x2="510" y2="126"/>
+          </g>
+          <rect x="196" y="70" width="208" height="4" fill="#e2b53f" opacity=".5"/>
+          <text x="300" y="182" text-anchor="middle" font-family="EB Garamond, serif" font-size="12" fill="#e8d6ae" font-style="italic">21 George IV Bridge</text>
+        </svg>
+        <span class="cap">getekend</span>
+      </figure>
+      <p>Het beroemdste adres van allemaal, en het draagt die naam met verve: "the birthplace of Harry Potter". Ze heeft hier ook echt geschreven. Na de brand van 2021 vier jaar dicht; sinds eind december 2025 weer open, inclusief een gerestaureerde <em>writer's room</em>. Vanaf de achterste tafels zie je het kasteel én George Heriot's School liggen.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> 21 George IV Bridge, EH1 1EN</p>
+    </article>
+
+    <article class="entry" id="balmoral" data-cat="fact" data-route="1" data-name="The Balmoral, kamer 552">
+      <span class="stepno"></span><span class="badge b-fact">VASTSTAAND</span>
+      <h3>The Balmoral, kamer 552</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Balmoral_Hotel.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Balmoral_Hotel.jpg/1920px-Balmoral_Hotel.jpg" data-cap="Het Balmoral aan het eind van Princes Street — foto Morgan Johnston, CC BY 2.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Balmoral_Hotel.jpg/1920px-Balmoral_Hotel.jpg" alt="Het Balmoral aan het eind van Princes Street" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> Het Balmoral aan het eind van Princes Street <a href="https://commons.wikimedia.org/wiki/File:Balmoral_Hotel.jpg" target="_blank" rel="noopener">Morgan Johnston · CC BY 2.0 ↗</a></figcaption>
+      </figure>
+      <p>Hier maakte ze in januari 2007 <em>Deathly Hallows</em> af. De kamer heet nu de J.K. Rowling Suite: uilenklopper op de deur, haar schrijfbureau binnen, en een gesigneerde marmeren buste van Hermes. De klok van het hotel loopt expres drie minuten voor, zodat reizigers hun trein halen — behalve op oudjaarsavond.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> 1 Princes Street, EH2 2EQ</p>
+    </article>
+
+    <article class="entry" data-cat="fun" data-name="Traverse Theatre Café">
+      <span class="badge b-gone">VERDWENEN</span>
+      <h3>Traverse Theatre Café</h3>
+      <p>Nog zo'n vaste schrijfplek uit de jaren negentig. Het café in die vorm bestaat niet meer; het theater zelf staat er nog aan Cambridge Street.</p>
+    </article>
+  </section>
+
+  <!-- II -->
+  <section class="chapter" id="ch2" data-num="II" data-title="De stad als inspiratiebron">
+    <figure class="chapter-banner" data-px>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Greyfriars_Kirkyard_004.jpg/1920px-Greyfriars_Kirkyard_004.jpg" alt="Grafstenen in Greyfriars Kirkyard" loading="lazy" decoding="async">
+      <span class="veil"></span>
+      <span class="btitle"><span>II</span></span>
+      <figcaption class="bcap">Grafstenen in Greyfriars Kirkyard — <a href="https://commons.wikimedia.org/wiki/File:Greyfriars_Kirkyard_004.jpg" target="_blank" rel="noopener">Postdlf, CC BY-SA 3.0</a></figcaption>
+    </figure>
+
+    <div class="chapter-head">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#e2b53f" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M10 42 h28 V20 l-14-10 -14 10z" fill="rgba(226,181,63,.1)"/>
+        <path d="M20 42 v-10 h8 v10"/><path d="M6 42 h36"/><circle cx="24" cy="22" r="3"/>
+      </svg>
+      <h2>II. De stad als inspiratiebron</h2>
+    </div>
+    <p class="chapter-note">Van kerkhofnamen tot een school met vier huizen.</p>
+    <div class="rule"></div>
+
+    <article class="entry" id="greyfriars" data-cat="likely" data-route="13" data-name="Greyfriars Kirkyard">
+      <span class="stepno"></span><span class="badge b-likely">AANNEMELIJK</span>
+      <h3>Greyfriars Kirkyard</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Thomas_Riddell's_Grave,_Greyfriars_Kirkyard.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Thomas_Riddell%27s_Grave%2C_Greyfriars_Kirkyard.jpg/1920px-Thomas_Riddell%27s_Grave%2C_Greyfriars_Kirkyard.jpg" data-cap="Het graf van Thomas Riddell in Greyfriars Kirkyard — foto Stefan Schäfer, Lich, CC BY-SA 3.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Thomas_Riddell%27s_Grave%2C_Greyfriars_Kirkyard.jpg/1920px-Thomas_Riddell%27s_Grave%2C_Greyfriars_Kirkyard.jpg" alt="Het graf van Thomas Riddell in Greyfriars Kirkyard" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> Het graf van Thomas Riddell in Greyfriars Kirkyard <a href="https://commons.wikimedia.org/wiki/File:Thomas_Riddell's_Grave,_Greyfriars_Kirkyard.jpg" target="_blank" rel="noopener">Stefan Schäfer, Lich · CC BY-SA 3.0 ↗</a></figcaption>
+      </figure>
+      <figure class="scene">
+        <svg viewBox="0 0 600 200" role="img" aria-label="Tekening van grafstenen in de mist op Greyfriars Kirkyard">
+          <rect width="600" height="200" fill="#0e0a22"/>
+          <circle cx="500" cy="46" r="22" fill="#fdf3d0" opacity=".85"/>
+          <circle cx="500" cy="46" r="46" fill="#fff6d0" opacity=".08"/>
+          <g fill="#1a1236" stroke="#8f7fb8" stroke-width="1.2">
+            <path d="M60 170 v-56 a22 22 0 0144 0 v56z"/><path d="M150 170 v-74 h38 v74z"/>
+            <path d="M250 170 v-66 a26 26 0 0152 0 v66z"/><path d="M350 170 v-50 h30 v50z"/>
+            <path d="M420 170 v-82 h46 v82z"/>
+          </g>
+          <g stroke="#8f7fb8" stroke-width="1.4"><line x1="268" y1="88" x2="284" y2="88"/><line x1="276" y1="80" x2="276" y2="104"/></g>
+          <text x="276" y="132" text-anchor="middle" font-family="Cinzel, serif" font-size="11" fill="#cbbde8">RIDDELL</text>
+          <text x="443" y="118" text-anchor="middle" font-family="Cinzel, serif" font-size="10" fill="#cbbde8">POTTER</text>
+          <text x="169" y="126" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#cbbde8">MOODIE</text>
+          <g opacity=".3" fill="#b9a9e0"><ellipse cx="180" cy="168" rx="180" ry="16"/><ellipse cx="460" cy="172" rx="150" ry="14"/></g>
+          <rect y="170" width="600" height="30" fill="#0a0718"/>
+        </svg>
+        <span class="cap">getekend</span>
+      </figure>
+      <p>Het kerkhof waar de namen liggen — de leukste zoektocht van de hele stad. Zoek Thomas Riddell, William McGonagall (berucht slechte dichter), Elizabeth Moodie, de familie Potter, Black en Scrymgeour. Rowling zei in 1999 dat ze namen verzamelt van heiligen, plaatsen, oorlogsmonumenten en grafstenen — ze woonde hier om de hoek, en na die zin lees je elke zerk met andere ogen.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> 26A Candlemaker Row, EH1 2QQ · gratis</p>
+    </article>
+
+    <article class="entry" id="heriots" data-cat="likely" data-route="14" data-name="George Heriot's School">
+      <span class="stepno"></span><span class="badge b-likely">AANNEMELIJK</span>
+      <h3>George Heriot's School</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Edinburgh_-_George_Heriot's_School_-_from_Greyfriars_churchyard.JPG" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Edinburgh_-_George_Heriot%27s_School_-_from_Greyfriars_churchyard.JPG/1920px-Edinburgh_-_George_Heriot%27s_School_-_from_Greyfriars_churchyard.JPG" data-cap="George Heriot&#x27;s School, gezien vanaf het kerkhof — foto Remi Mathis, CC BY-SA 3.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Edinburgh_-_George_Heriot%27s_School_-_from_Greyfriars_churchyard.JPG/1920px-Edinburgh_-_George_Heriot%27s_School_-_from_Greyfriars_churchyard.JPG" alt="George Heriot&#x27;s School, gezien vanaf het kerkhof" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> George Heriot&#x27;s School, gezien vanaf het kerkhof <a href="https://commons.wikimedia.org/wiki/File:Edinburgh_-_George_Heriot's_School_-_from_Greyfriars_churchyard.JPG" target="_blank" rel="noopener">Remi Mathis · CC BY-SA 3.0 ↗</a></figcaption>
+      </figure>
+      <figure class="scene">
+        <svg viewBox="0 0 600 200" role="img" aria-label="Tekening van George Heriot's School met vier torens">
+          <rect width="600" height="200" fill="#150e2f"/>
+          <g fill="#0d0821" stroke="#e2b53f" stroke-width="1.4">
+            <rect x="120" y="80" width="360" height="100"/>
+            <rect x="100" y="56" width="52" height="124"/><rect x="448" y="56" width="52" height="124"/>
+            <rect x="212" y="66" width="40" height="114"/><rect x="348" y="66" width="40" height="114"/>
+            <path d="M100 56 l26 -26 26 26z"/><path d="M448 56 l26 -26 26 26z"/>
+            <path d="M212 66 l20 -22 20 22z"/><path d="M348 66 l20 -22 20 22z"/>
+            <rect x="272" y="96" width="56" height="84"/><path d="M272 96 q28 -30 56 0z"/>
+          </g>
+          <g class="lit" fill="#ffcf5c" opacity=".75">
+            <rect x="116" y="90" width="8" height="12"/><rect x="464" y="90" width="8" height="12"/>
+            <rect x="226" y="98" width="8" height="12"/><rect x="362" y="98" width="8" height="12"/>
+            <rect x="160" y="120" width="9" height="13"/><rect x="300" y="128" width="9" height="13"/>
+            <rect x="418" y="120" width="9" height="13"/>
+          </g>
+          <rect x="150" y="150" width="14" height="20" fill="#a3243c" opacity=".85"/>
+          <rect x="250" y="150" width="14" height="20" fill="#1f7a5c" opacity=".85"/>
+          <rect x="336" y="150" width="14" height="20" fill="#2f5fb0" opacity=".85"/>
+          <rect x="436" y="150" width="14" height="20" fill="#d98527" opacity=".85"/>
+          <rect y="180" width="600" height="20" fill="#0a0718"/>
+        </svg>
+        <span class="cap">vier torens, vier huizen · getekend</span>
+      </figure>
+      <p>De sterkste Zweinstein-kandidaat: vier torens, gotische pracht, en leerlingen worden verdeeld over vier huizen (Lauriston, Greyfriars, Raeburn, Castle) die het hele jaar om punten strijden. Rowlings kinderen zaten er op school. Werkende school, dus niet te bezoeken — kijken kan vanaf George IV Bridge, Lauriston Place of vanuit Greyfriars Kirkyard.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> Lauriston Place, EH3 9EQ</p>
+    </article>
+
+    <article class="entry" id="victoria" data-cat="myth" data-route="9" data-name="Victoria Street &amp; West Bow">
+      <span class="stepno"></span><span class="badge b-myth">LIJKT EROP</span>
+      <h3>Victoria Street &amp; West Bow</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Victoria_Street,_Edinburgh_(Diagon_Alley)_-_Nov_29,_2019.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Victoria_Street%2C_Edinburgh_%28Diagon_Alley%29_-_Nov_29%2C_2019.jpg/1920px-Victoria_Street%2C_Edinburgh_%28Diagon_Alley%29_-_Nov_29%2C_2019.jpg" data-cap="Victoria Street in de avond — de straat die iedereen de Wegisweg noemt — foto Drew de F Fawkes, CC BY 2.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Victoria_Street%2C_Edinburgh_%28Diagon_Alley%29_-_Nov_29%2C_2019.jpg/1920px-Victoria_Street%2C_Edinburgh_%28Diagon_Alley%29_-_Nov_29%2C_2019.jpg" alt="Victoria Street in de avond — de straat die iedereen de Wegisweg noemt" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> Victoria Street in de avond — de straat die iedereen de Wegisweg noemt <a href="https://commons.wikimedia.org/wiki/File:Victoria_Street,_Edinburgh_(Diagon_Alley)_-_Nov_29,_2019.jpg" target="_blank" rel="noopener">Drew de F Fawkes · CC BY 2.0 ↗</a></figcaption>
+      </figure>
+      <figure class="scene">
+        <svg viewBox="0 0 600 200" role="img" aria-label="Tekening van de gekleurde winkelpuien van Victoria Street">
+          <rect width="600" height="200" fill="#150e2f"/>
+          <g stroke="#0a0718" stroke-width="1.5">
+            <rect x="10" y="60" width="86" height="140" fill="#2f6f52"/>
+            <rect x="96" y="48" width="86" height="152" fill="#8c2230"/>
+            <rect x="182" y="66" width="86" height="134" fill="#245f8f"/>
+            <rect x="268" y="42" width="86" height="158" fill="#c07a1e"/>
+            <rect x="354" y="70" width="86" height="130" fill="#5b2f74"/>
+            <rect x="440" y="54" width="86" height="146" fill="#1f6b52"/>
+            <rect x="526" y="76" width="74" height="124" fill="#9c3a2a"/>
+          </g>
+          <g fill="#0f0a24" stroke="#e2b53f" stroke-width="1">
+            <rect x="24" y="130" width="58" height="52"/><rect x="110" y="122" width="58" height="60"/>
+            <rect x="196" y="136" width="58" height="46"/><rect x="282" y="116" width="58" height="66"/>
+            <rect x="368" y="140" width="58" height="42"/><rect x="454" y="126" width="58" height="56"/>
+            <rect x="540" y="146" width="48" height="36"/>
+          </g>
+          <g class="lit" fill="#ffcf5c" opacity=".85">
+            <rect x="30" y="136" width="46" height="40"/><rect x="116" y="128" width="46" height="48"/>
+            <rect x="202" y="142" width="46" height="34"/><rect x="288" y="122" width="46" height="54"/>
+            <rect x="374" y="146" width="46" height="30"/><rect x="460" y="132" width="46" height="44"/>
+            <rect x="546" y="152" width="36" height="24"/>
+          </g>
+          <g fill="#f0d17a" font-family="Cinzel, serif" font-size="8" text-anchor="middle" letter-spacing="1">
+            <text x="53" y="112">BOOKS</text><text x="139" y="104">WANDS</text><text x="225" y="118">QUILLS</text>
+            <text x="311" y="98">BROOMS</text><text x="397" y="122">ROBES</text><text x="483" y="108">POTIONS</text>
+          </g>
+          <g stroke="#e2b53f" stroke-width="1" opacity=".55">
+            <line x1="0" y1="192" x2="600" y2="184"/><line x1="0" y1="196" x2="600" y2="190"/>
+          </g>
+        </svg>
+        <span class="cap">getekend</span>
+      </figure>
+      <p>De bochtige, kleurige winkelstraat die iedereen de Wegisweg noemt — en die er ook precies zo uitziet: gebogen gevels in zes kleuren, uithangborden, en een rij tovenaarswinkels die er echt zitten. Rowling bedacht de Wegisweg in haar hoofd, maar deze straat is inmiddels de plek waar iedereen hem ziet. Kijk ook even omhoog naar de gouden letters op de muur bovenaan. Op nummer 40 zat van 1873 tot 2004 <strong>Robert Cresser's Brush and Broom Shop</strong>, een winkel vol bezems. West Bow was in 1670 het huis van Major Thomas Weir, geëxecuteerd voor hekserij nadat hij het zelf had bekend.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> Victoria Street, EH1 2JW · beste blik vanaf Victoria Terrace</p>
+    </article>
+
+    <article class="entry" id="nms" data-cat="myth" data-route="16" data-name="National Museum of Scotland">
+      <span class="stepno"></span><span class="badge b-myth">LIJKT EROP</span>
+      <h3>National Museum of Scotland: drie objecten</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Building_National_Museum_of_Scotland_06.JPG" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Building_National_Museum_of_Scotland_06.JPG/1920px-Building_National_Museum_of_Scotland_06.JPG" data-cap="Het National Museum of Scotland aan Chambers Street — foto Nachosan, CC BY-SA 3.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Building_National_Museum_of_Scotland_06.JPG/1920px-Building_National_Museum_of_Scotland_06.JPG" alt="Het National Museum of Scotland aan Chambers Street" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> Het National Museum of Scotland aan Chambers Street <a href="https://commons.wikimedia.org/wiki/File:Building_National_Museum_of_Scotland_06.JPG" target="_blank" rel="noopener">Nachosan · CC BY-SA 3.0 ↗</a></figcaption>
+      </figure>
+      <p>Op level 1, in Kingdom of the Scots: de <strong>Lewis Chessmen</strong> (13e-eeuwse schaakstukken van walrusivoor, genoemd als bron voor het levende schaakspel), de <strong>Queen Mary Harp</strong> (een clàrsach — het instrument waarmee Pluisje in slaap wordt gespeeld), en een <strong>feniks</strong> in de zaal ernaast die iedereen aan Felix doet denken. Geen enkel bewijs, wel gratis entree.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> Chambers Street, EH1 1JF · gratis</p>
+    </article>
+
+    <article class="entry" id="castle" data-cat="myth" data-route="7" data-name="Edinburgh Castle">
+      <span class="stepno"></span><span class="badge b-myth">LIJKT EROP</span>
+      <h3>Edinburgh Castle &amp; de Esplanade</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Sunset_at_Edinburgh_Castle.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Sunset_at_Edinburgh_Castle.jpg/1920px-Sunset_at_Edinburgh_Castle.jpg" data-cap="Edinburgh Castle bij zonsondergang — foto Gary Campbell-Hall, CC BY 2.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Sunset_at_Edinburgh_Castle.jpg/1920px-Sunset_at_Edinburgh_Castle.jpg" alt="Edinburgh Castle bij zonsondergang" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> Edinburgh Castle bij zonsondergang <a href="https://commons.wikimedia.org/wiki/File:Sunset_at_Edinburgh_Castle.jpg" target="_blank" rel="noopener">Gary Campbell-Hall · CC BY 2.0 ↗</a></figcaption>
+      </figure>
+      <p>Een kasteel op een uitgedoofde vulkaan, hoog boven de stad: als je Zweinstein ergens voor je ziet, dan hier. Zweinstein staat volgens Rowling in Schotland, en dit is het silhouet dat de hele stad die sfeer geeft. De vlakke Esplanade ernaast doet menigeen aan een Zwerkbalveld denken.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> Castlehill, EH1 2NG</p>
+    </article>
+
+    <article class="entry" id="witches" data-cat="likely" data-route="8" data-name="The Witches' Well">
+      <span class="stepno"></span><span class="badge b-likely">AANNEMELIJK</span>
+      <h3>The Witches' Well</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Witches_Well.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Witches_Well.jpg/1920px-Witches_Well.jpg" data-cap="The Witches&#x27; Well op de Esplanade — foto (Lila), CC BY-SA 4.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Witches_Well.jpg/1920px-Witches_Well.jpg" alt="The Witches&#x27; Well op de Esplanade" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> The Witches&#x27; Well op de Esplanade <a href="https://commons.wikimedia.org/wiki/File:Witches_Well.jpg" target="_blank" rel="noopener">(Lila) · CC BY-SA 4.0 ↗</a></figcaption>
+      </figure>
+      <p>Klein gietijzeren fonteintje aan het begin van de Esplanade, in 1894 geplaatst ter nagedachtenis aan de honderden mensen die tussen de 16e en 18e eeuw als heks werden veroordeeld. Geen Potter-monument, maar wel de kern van waarom Edinburgh zo'n magische reputatie heeft.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> Castlehill, EH1 2NG · aan de muur, makkelijk te missen</p>
+    </article>
+
+    <article class="entry" data-cat="myth" data-name="Princes Street Gardens">
+      <span class="badge b-myth">LIJKT EROP</span>
+      <h3>Princes Street Gardens &amp; het Nor Loch</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Edinburgh_-_Princes_Street_Gardens_(49944531007).jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Edinburgh_-_Princes_Street_Gardens_%2849944531007%29.jpg/1920px-Edinburgh_-_Princes_Street_Gardens_%2849944531007%29.jpg" data-cap="Princes Street Gardens, waar ooit het Nor Loch lag — foto Mike McBey, CC BY 2.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Edinburgh_-_Princes_Street_Gardens_%2849944531007%29.jpg/1920px-Edinburgh_-_Princes_Street_Gardens_%2849944531007%29.jpg" alt="Princes Street Gardens, waar ooit het Nor Loch lag" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> Princes Street Gardens, waar ooit het Nor Loch lag <a href="https://commons.wikimedia.org/wiki/File:Edinburgh_-_Princes_Street_Gardens_(49944531007).jpg" target="_blank" rel="noopener">Mike McBey · CC BY 2.0 ↗</a></figcaption>
+      </figure>
+      <p>Waar nu het park ligt, lag tot begin 19e eeuw een meer: het Nor Loch, aan de voet van het kasteel. De vergelijking met het Zwarte Meer maakt zichzelf. Hier werd in 2005 ook <em>Half-Blood Prince</em> gelanceerd.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> Princes Street, EH2 2HG</p>
+    </article>
+
+    <article class="entry" id="potterrow" data-cat="myth" data-route="18" data-name="Potterrow">
+      <span class="stepno"></span><span class="badge b-myth">LIJKT EROP</span>
+      <h3>Potterrow</h3>
+      <p>Een straat die al eeuwen Potter heet, naar de pottenbakkers die hier buiten de stadsmuren zaten. De achternaam komt volgens Rowling van jeugdvriendjes, maar het blijft een prachtig toeval om hier te staan. De donkere voetgangerstunnel is precies het soort plek waar Harry en Dirk hun Dementors tegenkwamen.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> Potterrow, EH8 9BL</p>
+    </article>
+
+    <article class="entry" id="cockburn" data-cat="myth" data-route="3" data-name="Cockburn Street">
+      <span class="stepno"></span><span class="badge b-myth">LIJKT EROP</span>
+      <h3>Cockburn Street</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Cockburn_Street,_Edinburgh_-_21_April_2026.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Cockburn_Street%2C_Edinburgh_-_21_April_2026.jpg/1920px-Cockburn_Street%2C_Edinburgh_-_21_April_2026.jpg" data-cap="De bocht van Cockburn Street — foto Stinglehammer, CC BY-SA 4.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Cockburn_Street%2C_Edinburgh_-_21_April_2026.jpg/1920px-Cockburn_Street%2C_Edinburgh_-_21_April_2026.jpg" alt="De bocht van Cockburn Street" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> De bocht van Cockburn Street <a href="https://commons.wikimedia.org/wiki/File:Cockburn_Street,_Edinburgh_-_21_April_2026.jpg" target="_blank" rel="noopener">Stinglehammer · CC BY-SA 4.0 ↗</a></figcaption>
+      </figure>
+      <p>Uitgesproken als "Co-burn", maar lees het fonetisch en je hoort Knockturn Alley. Verder een steile, bochtige straat vol platenzaken — en tegenwoordig twee Potter-winkels, waaronder House of MinaLima.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> Cockburn Street, EH1 1BN</p>
+    </article>
+
+    <article class="entry" id="riddles" data-cat="myth" data-route="6" data-name="Riddle's Court">
+      <span class="stepno"></span><span class="badge b-myth">LIJKT EROP</span>
+      <h3>Riddle's Court</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Riddles_Court,_Edinburgh_-_2025-04-19_01.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Riddles_Court%2C_Edinburgh_-_2025-04-19_01.jpg/1920px-Riddles_Court%2C_Edinburgh_-_2025-04-19_01.jpg" data-cap="De binnenplaats van Riddle&#x27;s Court — foto 瑞丽江的河水, CC BY-SA 4.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Riddles_Court%2C_Edinburgh_-_2025-04-19_01.jpg/1920px-Riddles_Court%2C_Edinburgh_-_2025-04-19_01.jpg" alt="De binnenplaats van Riddle&#x27;s Court" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> De binnenplaats van Riddle&#x27;s Court <a href="https://commons.wikimedia.org/wiki/File:Riddles_Court,_Edinburgh_-_2025-04-19_01.jpg" target="_blank" rel="noopener">瑞丽江的河水 · CC BY-SA 4.0 ↗</a></figcaption>
+      </figure>
+      <p>Een 16e-eeuwse binnenplaats vlak bij de Royal Mile die toevallig Riddle heet. Geen enkel verband, maar hij ligt op de route en de naam op het bord is de foto waard.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> 322 Lawnmarket, EH1 2PG</p>
+    </article>
+
+    <article class="entry" id="bank" data-cat="myth" data-route="19" data-name="Bank of Scotland &amp; Old College">
+      <span class="stepno"></span><span class="badge b-myth">LIJKT EROP</span>
+      <h3>Bank of Scotland &amp; Old College</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Old_College,_University_of_Edinburgh_01.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Old_College%2C_University_of_Edinburgh_01.jpg/1920px-Old_College%2C_University_of_Edinburgh_01.jpg" data-cap="Old College van de universiteit — foto Stinglehammer, CC BY-SA 4.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Old_College%2C_University_of_Edinburgh_01.jpg/1920px-Old_College%2C_University_of_Edinburgh_01.jpg" alt="Old College van de universiteit" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> Old College van de universiteit <a href="https://commons.wikimedia.org/wiki/File:Old_College,_University_of_Edinburgh_01.jpg" target="_blank" rel="noopener">Stinglehammer · CC BY-SA 4.0 ↗</a></figcaption>
+      </figure>
+      <p>Twee zwaar-klassieke gebouwen die fans graag als Goudgrijp en als Zweinstein-binnenplaats aanwijzen. Het hoofdkantoor van de Bank of Scotland torent boven Princes Street uit; de binnenplaats van Old College ligt aan South Bridge. Puur uiterlijke gelijkenis.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> The Mound, EH1 1YZ · South Bridge, EH8 9YL</p>
+    </article>
+
+    <article class="entry" id="grassmarket" data-cat="myth" data-route="12" data-name="Grassmarket">
+      <span class="stepno"></span><span class="badge b-myth">LIJKT EROP</span>
+      <h3>Grassmarket</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Edinburgh,_74_-_78_Grassmarket_01.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Edinburgh%2C_74_-_78_Grassmarket_01.jpg/1920px-Edinburgh%2C_74_-_78_Grassmarket_01.jpg" data-cap="Gevels aan de Grassmarket — foto Stinglehammer, CC BY-SA 4.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Edinburgh%2C_74_-_78_Grassmarket_01.jpg/1920px-Edinburgh%2C_74_-_78_Grassmarket_01.jpg" alt="Gevels aan de Grassmarket" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> Gevels aan de Grassmarket <a href="https://commons.wikimedia.org/wiki/File:Edinburgh,_74_-_78_Grassmarket_01.jpg" target="_blank" rel="noopener">Stinglehammer · CC BY-SA 4.0 ↗</a></figcaption>
+      </figure>
+      <p>Oud executieplein, nu een plein vol pubs met het kasteel als achterwand. Wordt regelmatig als het Zweinsveld-gevoel aangewezen. Ook het startpunt om Victoria Street van onderaf te zien.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> Grassmarket, EH1 2JR</p>
+    </article>
+  </section>
+
+  <!-- III -->
+  <section class="chapter" id="ch3" data-num="III" data-title="Winkels">
+    <figure class="chapter-banner" data-px>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Edinburgh_Royal_Mile_%2849552100623%29.jpg/1920px-Edinburgh_Royal_Mile_%2849552100623%29.jpg" alt="Winkels langs de Royal Mile" loading="lazy" decoding="async">
+      <span class="veil"></span>
+      <span class="btitle"><span>III</span></span>
+      <figcaption class="bcap">Winkels langs de Royal Mile — <a href="https://commons.wikimedia.org/wiki/File:Edinburgh_Royal_Mile_(49552100623).jpg" target="_blank" rel="noopener">Jorge Franganillo, CC BY 2.0</a></figcaption>
+    </figure>
+
+    <div class="chapter-head">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#e2b53f" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M10 18 h28 l-3 24 H13z" fill="rgba(226,181,63,.1)"/><path d="M18 18 v-4a6 6 0 0112 0v4"/><path d="M24 26 v8"/>
+      </svg>
+      <h2>III. Winkels</h2>
+    </div>
+    <p class="chapter-note">Alle vier binnen tien minuten lopen van elkaar.</p>
+    <div class="rule"></div>
+
+    <article class="entry" id="museumcontext" data-cat="fun" data-route="10" data-name="Museum Context">
+      <span class="stepno"></span><span class="badge b-fun">GEWOON LEUK</span>
+      <h3>Museum Context (voorheen Diagon House)</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:West_Bow_Well_and_Victoria_Street_-_01.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/West_Bow_Well_and_Victoria_Street_-_01.jpg/1920px-West_Bow_Well_and_Victoria_Street_-_01.jpg" data-cap="De West Bow Well onderaan Victoria Street — foto Carlos Delgado, CC BY-SA 3.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/West_Bow_Well_and_Victoria_Street_-_01.jpg/1920px-West_Bow_Well_and_Victoria_Street_-_01.jpg" alt="De West Bow Well onderaan Victoria Street" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> De West Bow Well onderaan Victoria Street <a href="https://commons.wikimedia.org/wiki/File:West_Bow_Well_and_Victoria_Street_-_01.jpg" target="_blank" rel="noopener">Carlos Delgado · CC BY-SA 3.0 ↗</a></figcaption>
+      </figure>
+      <p>De bekendste, over twee stenen gewelven met een draaitrap ertussen en een metalen draak langs het plafond. Officieel gelicenseerde merchandise, toverstokken, sjaals, replica-bezems. Het pand is het oude bezemwinkeltje van Robert Cresser. Tweede vestiging op Cockburn Street. Reken op een rij.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> 40 Victoria Street, EH1 2JW</p>
+    </article>
+
+    <article class="entry" id="minalima" data-cat="fun" data-route="4" data-name="House of MinaLima">
+      <span class="stepno"></span><span class="badge b-fun">GEWOON LEUK</span>
+      <h3>House of MinaLima</h3>
+      <p>De interessantste van het stel: galerie-annex-winkel van Miraphora Mina en Eduardo Lima, de grafisch ontwerpers die alle papieren props van de films maakten — de Sluipwegwijzer, de brieven van Zweinstein, de Ochtendprofeet. Geopend eind 2024, na Londen, New York, Japan en Zuid-Korea.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> 42–44 Cockburn Street, EH1 1PB · dagelijks 10–18u</p>
+    </article>
+
+    <article class="entry" id="galaxy" data-cat="fun" data-route="11" data-name="The Enchanted Galaxy">
+      <span class="stepno"></span><span class="badge b-fun">GEWOON LEUK</span>
+      <h3>The Enchanted Galaxy</h3>
+      <p>Breder assortiment (ook Lord of the Rings en andere franchises), met filmprop-replica's en de toverstokken van alle hoofdpersonen. Meerdere vestigingen in de stad, inclusief één op de luchthaven voor als je het vergeten bent.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> Victoria Street, EH1 2JW</p>
+    </article>
+
+    <article class="entry" data-cat="fun" data-name="Aha Ha Ha Jokes">
+      <span class="badge b-gone">VERDWENEN</span>
+      <h3>Aha Ha Ha Jokes &amp; Novelties</h3>
+      <p>De grappenwinkel op West Bow die door gidsen als de Wemel-winkel werd aangewezen. Inmiddels weg, net als de winkel die zich achtereenvolgens The Boy Wizard en The Great Wizard noemde tot Warner Bros. daar een stokje voor stak.</p>
+    </article>
+  </section>
+
+  <!-- IV -->
+  <section class="chapter" id="ch4" data-num="IV" data-title="Doen en drinken">
+    <figure class="chapter-banner" data-px>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Volcano_Sunset_-_Edinburgh_Castle_%284703588695%29.jpg/1920px-Volcano_Sunset_-_Edinburgh_Castle_%284703588695%29.jpg" alt="Het kasteel op zijn vulkaan bij zonsondergang" loading="lazy" decoding="async">
+      <span class="veil"></span>
+      <span class="btitle"><span>IV</span></span>
+      <figcaption class="bcap">Het kasteel op zijn vulkaan bij zonsondergang — <a href="https://commons.wikimedia.org/wiki/File:Volcano_Sunset_-_Edinburgh_Castle_(4703588695).jpg" target="_blank" rel="noopener">marsupium photography, CC BY-SA 2.0</a></figcaption>
+    </figure>
+
+    <div class="chapter-head">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#e2b53f" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M12 20 h24 a12 12 0 01-24 0z" fill="rgba(226,181,63,.12)"/>
+        <path d="M8 20 h32"/><path d="M18 14 c0-4 4-4 4-8"/><path d="M27 14 c0-3 3-3 3-6"/>
+      </svg>
+      <h2>IV. Doen en drinken</h2>
+    </div>
+    <p class="chapter-note">Niets hiervan is canon. Dat is ook niet de bedoeling.</p>
+    <div class="rule"></div>
+
+    <article class="entry" id="dom" data-cat="fun" data-route="20" data-name="Department of Magic">
+      <span class="stepno"></span><span class="badge b-fun">GEWOON LEUK</span>
+      <h3>Department of Magic</h3>
+      <p>Twee escape rooms in de gewelven onder Blair Street: <em>Prophecies Quest</em> en <em>Dark Lord Resurrection</em>. Voor 2 tot 6 spelers, vanaf 11 jaar. Vooraf boeken.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> 9 Blair Street, EH1 1QR</p>
+    </article>
+
+    <article class="entry" id="potions" data-cat="fun" data-route="21" data-name="Magic Potions Tavern">
+      <span class="stepno"></span><span class="badge b-fun">GEWOON LEUK</span>
+      <h3>Magic Potions Tavern</h3>
+      <p>De bar in hetzelfde pand: cocktails brouwen met ketels, toverstokken en rokende ingrediënten. Er is ook een alcoholvrije variant, dus geschikt met kinderen.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> 9 Blair Street, EH1 1QR</p>
+    </article>
+
+    <article class="entry" id="doghouse" data-cat="fun" data-route="22" data-name="The Dog House (boterbier)">
+      <span class="stepno"></span><span class="badge b-fun">GEWOON LEUK</span>
+      <h3>The Dog House</h3>
+      <p>Buurtpub in Newington die alcoholische boterbier tapt. Ver van de toeristenmassa en dus vaak het rustigste adres op deze lijst — een goed eindpunt.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> 18–24 Clerk Street, EH8 9HX</p>
+    </article>
+
+    <article class="entry" data-cat="fun" data-name="Museum of Magic">
+      <span class="badge b-fun">GEWOON LEUK</span>
+      <h3>Museum of Magic, Fortune-telling &amp; Witchcraft</h3>
+      <p>Klein museum net van de Royal Mile over hekserij, occultisme en waarzeggerij, met tarot- en waarzegsessies. Geen Potter-link, wel precies de juiste sfeer. Vlakbij zit <em>Wheel of Fate</em>, een winkel/atelier met workshops bezembinden, boekbinden en tarot.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> Royal Mile, Old Town</p>
+    </article>
+
+    <article class="entry" data-cat="fun" data-name="The Ghost Bus Tour">
+      <span class="badge b-fun">GEWOON LEUK</span>
+      <h3>The Ghost Bus Tour</h3>
+      <p>Zwarte dubbeldekker uit de jaren zestig, ooit een lijkwagen, nu een horror-komedie op wielen. Officieel niets met Potter te maken, maar dichter bij de Collectebus kom je niet.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> vertrek Royal Mile</p>
+    </article>
+
+    <article class="entry" data-cat="fun" data-name="The Cauldron">
+      <span class="badge b-gone">STATUS ONZEKER</span>
+      <h3>The Cauldron</h3>
+      <p>Toverbar op Frederick Street met een uitgebreide potion-making class. Meerdere bronnen melden dat de keten wereldwijd is gesloten, andere lijsten hem nog als open. Check dit voor je boekt.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> 57a Frederick Street, EH2 1LH</p>
+    </article>
+  </section>
+
+  <!-- V -->
+  <section class="chapter" id="ch5" data-num="V" data-title="Rondleidingen">
+    <figure class="chapter-banner" data-px>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/c6/The_Old_Town_at_Night_-_geograph.org.uk_-_3263267.jpg" alt="De Old Town bij nacht" loading="lazy" decoding="async">
+      <span class="veil"></span>
+      <span class="btitle"><span>V</span></span>
+      <figcaption class="bcap">De Old Town bij nacht — <a href="https://commons.wikimedia.org/wiki/File:The_Old_Town_at_Night_-_geograph.org.uk_-_3263267.jpg" target="_blank" rel="noopener">Anne Burgess, CC BY-SA 2.0</a></figcaption>
+    </figure>
+
+    <div class="chapter-head">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#e2b53f" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <circle cx="24" cy="24" r="15"/><path d="M24 9 v30 M9 24 h30" opacity=".55"/>
+        <path d="M24 15 l3 6 6 3-6 3-3 6-3-6-6-3 6-3z" fill="rgba(226,181,63,.18)"/>
+      </svg>
+      <h2>V. Rondleidingen</h2>
+    </div>
+    <div class="rule"></div>
+
+    <article class="entry" data-cat="fun" data-name="The Potter Trail">
+      <span class="badge b-fun">GEWOON LEUK</span>
+      <h3>The Potter Trail</h3>
+      <p>De klassieker: 90 minuten, gids in gewaad, start bij het standbeeld van Greyfriars Bobby en eindigt op Victoria Terrace. Gratis op fooibasis. Er is ook een virtuele versie.</p>
+    </article>
+
+    <article class="entry" data-cat="fun" data-name="The Potter Tour">
+      <span class="badge b-fun">GEWOON LEUK</span>
+      <h3>The Potter Tour</h3>
+      <p>Uitgebreidere variant van vier uur die meer wijken aandoet. Daarnaast bestaan er audiotours die je op eigen tempo loopt. Voor een stadswandeling van een paar uur is meer dan £40 niet nodig.</p>
+    </article>
+  </section>
+
+  <!-- VI -->
+  <section class="chapter" id="ch6" data-num="VI" data-title="Eerbetoon aan de schrijfster">
+    <figure class="chapter-banner" data-px>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Playfair_Library%2C_Old_College%2C_University_of_Edinburgh.jpg/1920px-Playfair_Library%2C_Old_College%2C_University_of_Edinburgh.jpg" alt="De Playfair Library in Old College" loading="lazy" decoding="async">
+      <span class="veil"></span>
+      <span class="btitle"><span>VI</span></span>
+      <figcaption class="bcap">De Playfair Library in Old College — <a href="https://commons.wikimedia.org/wiki/File:Playfair_Library,_Old_College,_University_of_Edinburgh.jpg" target="_blank" rel="noopener">LornaMCampbell, CC BY-SA 4.0</a></figcaption>
+    </figure>
+
+    <div class="chapter-head">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#e2b53f" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <circle cx="24" cy="24" r="13" fill="rgba(226,181,63,.12)"/>
+        <path d="M24 11 v26 M11 24 h26" opacity=".45"/><path d="M17 24 a7 7 0 0114 0"/>
+      </svg>
+      <h2>VI. Eerbetoon aan de schrijfster</h2>
+    </div>
+    <div class="rule"></div>
+
+    <article class="entry" id="chambers" data-cat="fact" data-route="2" data-name="Handafdrukken City Chambers">
+      <span class="stepno"></span><span class="badge b-fact">VASTSTAAND</span>
+      <h3>Handafdrukken bij de City Chambers</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:City_Chambers,_Edinburgh.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/City_Chambers%2C_Edinburgh.jpg/1920px-City_Chambers%2C_Edinburgh.jpg" data-cap="De City Chambers aan de High Street — foto Stinglehammer, CC BY-SA 4.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/City_Chambers%2C_Edinburgh.jpg/1920px-City_Chambers%2C_Edinburgh.jpg" alt="De City Chambers aan de High Street" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> De City Chambers aan de High Street <a href="https://commons.wikimedia.org/wiki/File:City_Chambers,_Edinburgh.jpg" target="_blank" rel="noopener">Stinglehammer · CC BY-SA 4.0 ↗</a></figcaption>
+      </figure>
+      <p>In de binnenplaats tegenover St Giles' Cathedral liggen de handafdrukken van de winnaars van The Edinburgh Award. Die van Rowling zijn van 2008 en liggen rechtsboven in het eerste vak, links door de doorgang. Ook te vinden: Ian Rankin, Chris Hoy, Elizabeth Blackadder en Doddie Weir.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> 253 High Street, EH1 1YJ · gratis, buiten</p>
+    </article>
+
+    <article class="entry" id="writers" data-cat="fact" data-route="5" data-name="The Writers' Museum">
+      <span class="stepno"></span><span class="badge b-fact">VASTSTAAND</span>
+      <h3>The Writers' Museum</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Scottish_Writers'_Museum.jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Scottish_Writers%27_Museum.jpg/1920px-Scottish_Writers%27_Museum.jpg" data-cap="The Writers&#x27; Museum in Lady Stair&#x27;s Close — foto Stefan Schäfer, Lich, CC BY-SA 3.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Scottish_Writers%27_Museum.jpg/1920px-Scottish_Writers%27_Museum.jpg" alt="The Writers&#x27; Museum in Lady Stair&#x27;s Close" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> The Writers&#x27; Museum in Lady Stair&#x27;s Close <a href="https://commons.wikimedia.org/wiki/File:Scottish_Writers'_Museum.jpg" target="_blank" rel="noopener">Stefan Schäfer, Lich · CC BY-SA 3.0 ↗</a></figcaption>
+      </figure>
+      <p>Gewijd aan Burns, Scott en Stevenson — niet aan Rowling. Maar het legt uit waarom Edinburgh de eerste UNESCO City of Literature werd, en dat is de context waarin de boeken hier zijn ontstaan. Gratis.</p>
+      <p class="addr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg> Lady Stair's Close, Lawnmarket, EH1 2PA</p>
+    </article>
+  </section>
+
+  <!-- VII -->
+  <section class="chapter" id="ch7" data-num="VII" data-title="Buiten de stad">
+    <figure class="chapter-banner" data-px>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Jacobite_on_Glenfinnan_Viaduct_2_20211024.jpg/1920px-Jacobite_on_Glenfinnan_Viaduct_2_20211024.jpg" alt="De Jacobite over het Glenfinnan-viaduct" loading="lazy" decoding="async">
+      <span class="veil"></span>
+      <span class="btitle"><span>VII</span></span>
+      <figcaption class="bcap">De Jacobite over het Glenfinnan-viaduct — <a href="https://commons.wikimedia.org/wiki/File:Jacobite_on_Glenfinnan_Viaduct_2_20211024.jpg" target="_blank" rel="noopener">Daniel Kraft, CC BY-SA 3.0</a></figcaption>
+    </figure>
+
+    <div class="chapter-head">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#e2b53f" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M8 34 h32"/><path d="M12 34 V22 a4 4 0 014-4h14l6 8v8" fill="rgba(226,181,63,.1)"/>
+        <circle cx="17" cy="37" r="3"/><circle cx="31" cy="37" r="3"/><path d="M20 12 c2-3 5-1 4 2" opacity=".7"/>
+      </svg>
+      <h2>VII. Buiten de stad</h2>
+    </div>
+    <div class="rule"></div>
+
+    <article class="entry" data-cat="fact" data-name="Jacobite Steam Train">
+      <span class="badge b-fact">VASTSTAAND</span>
+      <h3>De Jacobite Steam Train &amp; Glenfinnan Viaduct</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Jacobite_Steam_Train_passing_Glenfinnan_Viaduct_(2025)_(1).jpg" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Jacobite_Steam_Train_passing_Glenfinnan_Viaduct_%282025%29_%281%29.jpg/1920px-Jacobite_Steam_Train_passing_Glenfinnan_Viaduct_%282025%29_%281%29.jpg" data-cap="De Jacobite Steam Train op het Glenfinnan-viaduct — foto S. Perquin, CC BY-SA 4.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Jacobite_Steam_Train_passing_Glenfinnan_Viaduct_%282025%29_%281%29.jpg/1920px-Jacobite_Steam_Train_passing_Glenfinnan_Viaduct_%282025%29_%281%29.jpg" alt="De Jacobite Steam Train op het Glenfinnan-viaduct" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> De Jacobite Steam Train op het Glenfinnan-viaduct <a href="https://commons.wikimedia.org/wiki/File:Jacobite_Steam_Train_passing_Glenfinnan_Viaduct_(2025)_(1).jpg" target="_blank" rel="noopener">S. Perquin · CC BY-SA 4.0 ↗</a></figcaption>
+      </figure>
+      <p>De echte Zweinstein Expres: 84 mijl heen en terug tussen Fort William en Mallaig, over het viaduct uit de films. Vanuit Edinburgh is dit een lange dag of beter een overnachting — trein naar Glasgow, dan door naar Fort William. Ver van tevoren boeken in het hoogseizoen.</p>
+    </article>
+
+    <article class="entry" data-cat="fact" data-name="Alnwick Castle">
+      <span class="badge b-fact">VASTSTAAND</span>
+      <h3>Alnwick Castle</h3>
+      <figure class="plate">
+        <a class="frame" href="https://commons.wikimedia.org/wiki/File:Alnwick_Castle_2011.JPG" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Alnwick_Castle_2011.JPG/1920px-Alnwick_Castle_2011.JPG" data-cap="Alnwick Castle, waar de vlieglessen zijn gefilmd — foto Dr.Haus, CC BY-SA 3.0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Alnwick_Castle_2011.JPG/1920px-Alnwick_Castle_2011.JPG" alt="Alnwick Castle, waar de vlieglessen zijn gefilmd" loading="lazy" decoding="async"></a>
+        <figcaption><b>Foto</b> Alnwick Castle, waar de vlieglessen zijn gefilmd <a href="https://commons.wikimedia.org/wiki/File:Alnwick_Castle_2011.JPG" target="_blank" rel="noopener">Dr.Haus · CC BY-SA 3.0 ↗</a></figcaption>
+      </figure>
+      <p>Ruim anderhalf uur naar het zuiden, net over de Engelse grens: hier leerde Harry vliegen. Een van de weinige echte filmlocaties binnen dagtripafstand van Edinburgh.</p>
+    </article>
+  </section>
+
+  <div class="notice">
+    <h2>Twee dingen om te weten voor je gaat</h2>
+    <p><strong>Kom voor het boek, niet voor de film.</strong> De filmlocaties liggen in de Highlands, Engeland en Wales — wat Edinburgh heeft is zeldzamer: dit is de stad waar het geschreven is, met de cafés, de kerkhoven en de straten die je onderweg tegenkomt.</p>
+    <p><strong>Haar woonhuizen staan hier bewust niet met adres.</strong> Rowling woonde onder meer in Marchmont, Gardner's Crescent, South Lorne Place in Leith, Hazelbank Terrace en later Merchiston. Het zijn privéwoningen met bewoners; er valt niets te zien behalve een gevel.</p>
+  </div>
+
+  <figure class="scene outro-scene">
+    <svg viewBox="0 0 960 300" role="img" aria-label="Silhouet van Edinburgh bij nacht met het kasteel, de kroontoren van St Giles en de klokkentoren van het Balmoral">
+      <defs>
+        <linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2a1a5e"/><stop offset="55%" stop-color="#3d1f4e"/><stop offset="100%" stop-color="#120a20"/></linearGradient>
+        <linearGradient id="rock" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#241640"/><stop offset="100%" stop-color="#0b0718"/></linearGradient>
+        <radialGradient id="moong"><stop offset="0%" stop-color="#fff6d0"/>
+          <stop offset="60%" stop-color="rgba(255,240,190,.35)"/><stop offset="100%" stop-color="rgba(255,240,190,0)"/></radialGradient>
+      </defs>
+      <rect width="960" height="300" fill="url(#skyg)"/>
+      <circle cx="790" cy="70" r="70" fill="url(#moong)"/><circle cx="790" cy="70" r="26" fill="#fdf3d0"/>
+      <g fill="#fff">
+        <circle cx="90" cy="46" r="1.6"/><circle cx="180" cy="88" r="1.2"/><circle cx="300" cy="38" r="1.8"/>
+        <circle cx="420" cy="76" r="1.2"/><circle cx="530" cy="34" r="1.6"/><circle cx="640" cy="92" r="1.3"/>
+        <circle cx="880" cy="140" r="1.4"/><circle cx="60" cy="130" r="1.2"/><circle cx="245" cy="150" r="1.1"/>
+      </g>
+      <path d="M0 300 L0 226 Q110 150 250 148 L470 148 L470 300z" fill="url(#rock)"/>
+      <g fill="#0d0821" stroke="#e2b53f" stroke-width="1.6">
+        <rect x="120" y="106" width="34" height="44"/><path d="M120 106 h34 v-8 h-6v5h-7v-5h-8v5h-7v-5h-6z"/>
+        <rect x="160" y="86" width="52" height="64"/><path d="M160 86 h52 v-9 h-8v5h-10v-5h-8v5h-10v-5h-8z"/>
+        <rect x="218" y="112" width="40" height="38"/><path d="M218 112 h40 v-8 h-7v5h-9v-5h-8v5h-9v-5h-7z"/>
+        <rect x="264" y="98" width="26" height="52"/><path d="M277 78 l14 20 h-28z"/>
+      </g>
+      <g class="lit" fill="#ffcf5c">
+        <rect x="171" y="102" width="6" height="9"/><rect x="189" y="102" width="6" height="9"/>
+        <rect x="171" y="122" width="6" height="9"/><rect x="230" y="126" width="6" height="9"/>
+        <rect x="132" y="120" width="5" height="8"/><rect x="272" y="116" width="5" height="9"/>
+      </g>
+      <g fill="#0d0821" stroke="#e2b53f" stroke-width="1.5">
+        <rect x="530" y="150" width="44" height="150"/><rect x="540" y="112" width="24" height="40"/>
+        <path d="M540 112 q12 -26 24 0" fill="none"/><path d="M552 86 v26"/><circle cx="552" cy="82" r="4"/>
+      </g>
+      <g fill="#0d0821" stroke="#e2b53f" stroke-width="1.5">
+        <rect x="700" y="150" width="60" height="150"/><rect x="714" y="96" width="32" height="56"/>
+        <path d="M714 96 l16 -26 16 26z"/><circle cx="730" cy="120" r="10" fill="#160f30"/>
+      </g>
+      <g stroke="#ffcf5c" stroke-width="1.6" stroke-linecap="round">
+        <line id="hourHand" x1="730" y1="120" x2="730" y2="114"/>
+        <line id="minHand" x1="730" y1="120" x2="730" y2="112"/>
+      </g>
+      <g fill="#0b0718" stroke="rgba(226,181,63,.35)" stroke-width="1">
+        <rect x="300" y="182" width="70" height="118"/><rect x="372" y="196" width="58" height="104"/>
+        <rect x="432" y="176" width="64" height="124"/><rect x="580" y="190" width="66" height="110"/>
+        <rect x="650" y="204" width="46" height="96"/><rect x="770" y="186" width="72" height="114"/>
+        <rect x="846" y="200" width="60" height="100"/><rect x="0" y="212" width="66" height="88"/>
+        <rect x="70" y="228" width="46" height="72"/>
+      </g>
+      <g class="lit" fill="#ffcf5c" opacity=".85">
+        <rect x="314" y="200" width="7" height="10"/><rect x="336" y="222" width="7" height="10"/>
+        <rect x="386" y="216" width="7" height="10"/><rect x="452" y="196" width="7" height="10"/>
+        <rect x="474" y="228" width="7" height="10"/><rect x="598" y="210" width="7" height="10"/>
+        <rect x="662" y="224" width="7" height="10"/><rect x="792" y="206" width="7" height="10"/>
+        <rect x="862" y="222" width="7" height="10"/><rect x="20" y="234" width="7" height="10"/>
+      </g>
+    </svg>
+    <span class="cap">Old Town bij nacht · getekend</span>
+  </figure>
+
+  <footer>
+    <p>Samengesteld uit onder meer Forever Edinburgh (de officiële stadsgids), The Potter Tour, Edinburgh Expert en reisgidsen die de locaties ter plekke controleerden. Openingstijden en winkels wisselen snel in de Old Town — check actuele info voor je op pad gaat.</p>
+    <p>De foto's komen van <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener">Wikimedia Commons</a> en staan onder een Creative Commons-licentie; fotograaf en licentie staan bij elke afbeelding, klik erop voor de grote versie en de bronpagina. De tekeningen, emblemen en het randwerk zijn met de hand in SVG gemaakt en geen officiële Harry Potter-beeldmerken.</p>
+    <p>Harry Potter en alle namen daaruit zijn eigendom van J.K. Rowling en Warner Bros. Dit is een niet-officiële, niet-commerciële reisgids.</p>
+  </footer>
+</div>
+
+<div id="mapFull" aria-hidden="true">
+  <div class="mf-inner" role="dialog" aria-modal="true" aria-label="De kaart, schermvullend">
+    <span class="mf-rod mf-rod-top" aria-hidden="true"></span>
+    <div class="mf-clip"><div class="mf-body"></div></div>
+    <span class="mf-rod mf-rod-bot" aria-hidden="true"></span>
+    <button type="button" id="mfClose">Mischief managed!</button>
+    <p class="mf-hint">Sleep de kaart opzij · tik op een medaillon om naar die plek te gaan</p>
+  </div>
+</div>
+
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Foto groot bekijken"><div><img alt=""><div class="lbcap"></div></div></div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hero = document.getElementById('hero');
+  var bar = document.getElementById('progress');
+  var topbar = document.getElementById('topbar');
+  var nowChapter = document.getElementById('nowChapter');
+  var pxSky = document.getElementById('pxSky');
+  var pxStars = document.getElementById('pxStars');
+  var pxCandles = document.getElementById('pxCandles');
+  var bandFar = document.getElementById('bandFar');
+  var bandNear = document.getElementById('bandNear');
+  var spy = document.getElementById('spy');
+  var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter'));
+  var entries = Array.prototype.slice.call(document.querySelectorAll('.entry'));
+
+  /* repeating skyline strip, drawn once and reused as a background */
+  function strip(color, opacity){
+    var s = '<svg xmlns="http://www.w3.org/2000/svg" width="420" height="120" viewBox="0 0 420 120">' +
+      '<g fill="' + color + '" opacity="' + opacity + '">' +
+      '<rect x="0" y="60" width="46" height="60"/><rect x="52" y="42" width="30" height="78"/>' +
+      '<rect x="88" y="74" width="52" height="46"/><rect x="146" y="30" width="24" height="90"/>' +
+      '<polygon points="158,10 170,30 146,30"/>' +
+      '<rect x="176" y="66" width="60" height="54"/><rect x="242" y="50" width="34" height="70"/>' +
+      '<rect x="282" y="80" width="44" height="40"/><rect x="332" y="38" width="28" height="82"/>' +
+      '<polygon points="346,16 360,38 332,38"/><rect x="366" y="70" width="54" height="50"/>' +
+      '</g></svg>';
+    return 'url("data:image/svg+xml;charset=utf8,' + encodeURIComponent(s) + '")';
+  }
+  bandFar.style.backgroundImage = strip('#a87f2c', 1);
+  bandNear.style.backgroundImage = strip('#5d4520', 1);
+
+  /* scroll-spy nav */
+  chapters.forEach(function(c){
+    var a = document.createElement('a');
+    a.href = '#' + c.id;
+    a.textContent = c.dataset.num;
+    a.title = c.dataset.title;
+    spy.appendChild(a);
+  });
+  var spyLinks = Array.prototype.slice.call(spy.querySelectorAll('a'));
+
+  var ticking = false;
+  function frame(){
+    ticking = false;
+    var y = window.scrollY;
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+
+    if (!reduce){
+      pxSky.style.transform = 'translateY(' + (y * 0.06) + 'px)';
+      pxStars.style.transform = 'translateY(' + (y * 0.14) + 'px)';
+      pxCandles.style.transform = 'translateY(' + (y * -0.28) + 'px)';
+      bandFar.style.transform = 'translateX(' + (-(y * 0.05) % 420) + 'px)';
+      bandNear.style.transform = 'translateX(' + (-(y * 0.13) % 420) + 'px)';
+      var f = Math.min(1, y / 520);
+      hero.style.opacity = String(1 - f * 0.85);
+      hero.style.transform = 'translateY(' + (y * 0.18) + 'px)';
+    }
+
+    var showBar = y > 420;
+    topbar.classList.toggle('show', showBar);
+    spy.classList.toggle('show', showBar);
+
+    var current = null;
+    chapters.forEach(function(c){
+      if (c.getBoundingClientRect().top <= 140) current = c;
+    });
+    spyLinks.forEach(function(a, i){ a.classList.toggle('active', chapters[i] === current); });
+    nowChapter.textContent = current
+      ? current.dataset.num + '.  ' + current.dataset.title
+      : 'Het Edinburgh van Harry Potter';
+  }
+  window.addEventListener('scroll', function(){
+    if (!ticking){ ticking = true; requestAnimationFrame(frame); }
+  }, {passive:true});
+  frame();
+
+  /* reveal on scroll, staggered */
+  if ('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(list){
+      list.forEach(function(e){
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        var sibs = Array.prototype.slice.call(el.parentNode.querySelectorAll('.entry'));
+        el.style.transitionDelay = Math.min(sibs.indexOf(el) % 3, 2) * 90 + 'ms';
+        el.classList.add('in');
+        io.unobserve(el);
+      });
+    }, {rootMargin:'0px 0px -70px 0px'});
+    entries.forEach(function(el){ io.observe(el); });
+
+    var cio = new IntersectionObserver(function(list){
+      list.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('seen'); cio.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -120px 0px'});
+    chapters.forEach(function(c){ cio.observe(c); });
+  } else {
+    entries.forEach(function(el){ el.classList.add('in'); });
+    chapters.forEach(function(c){ c.classList.add('seen'); });
+  }
+
+  /* the Balmoral clock, three minutes fast */
+  var hour = document.getElementById('hourHand'), min = document.getElementById('minHand');
+  function tick(){
+    var d = new Date();
+    var m = d.getMinutes() + 3 + d.getSeconds()/60;
+    var hh = (d.getHours() % 12) + m/60;
+    function set(el, deg, len){
+      var r = (deg - 90) * Math.PI / 180;
+      el.setAttribute('x2', (730 + Math.cos(r)*len).toFixed(2));
+      el.setAttribute('y2', (120 + Math.sin(r)*len).toFixed(2));
+    }
+    set(hour, hh*30, 4.5); set(min, m*6, 7.5);
+  }
+  if (hour && min){ tick(); setInterval(tick, 20000); }
+
+  /* owl */
+  var owl = document.getElementById('owl');
+  function fly(){
+    if (!owl || reduce) return;
+    owl.style.top = (8 + Math.random()*22) + '%';
+    owl.style.opacity = '.85';
+    owl.animate([{transform:'translate(0,0)'},
+      {transform:'translate(' + (window.innerWidth + 180) + 'px,-40px)'}],
+      {duration:11000, easing:'linear'}).onfinish = function(){ owl.style.opacity = '0'; };
+  }
+  /* de vlucht wordt in de tovereditie overgenomen door magie.js */
+
+  /* filters */
+  var buttons = document.querySelectorAll('#filters button');
+  var countEl = document.getElementById('count');
+  function apply(filter){
+    var n = 0;
+    entries.forEach(function(e){
+      var show = (filter === 'all' || e.dataset.cat === filter);
+      e.classList.toggle('hidden', !show);
+      if (show) n++;
+    });
+    chapters.forEach(function(c){ c.classList.toggle('hidden', !c.querySelector('.entry:not(.hidden)')); });
+    countEl.textContent = n + ' plekken';
+  }
+  buttons.forEach(function(b){
+    b.addEventListener('click', function(){
+      buttons.forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+      apply(b.dataset.f);
+    });
+  });
+  apply('all');
+
+  /* walking route */
+  var routed = entries.filter(function(e){ return e.dataset.route; })
+                      .sort(function(a,b){ return a.dataset.route - b.dataset.route; });
+  var list = document.getElementById('routeList');
+  routed.forEach(function(e, i){
+    var badge = e.querySelector('.stepno');
+    if (badge) badge.textContent = i + 1;
+    var li = document.createElement('li'), a = document.createElement('a');
+    a.href = '#' + e.id; a.innerHTML = e.dataset.name;
+    a.addEventListener('click', function(){
+      e.classList.remove('flash'); void e.offsetWidth; e.classList.add('flash');
+    });
+    li.appendChild(a); list.appendChild(li);
+  });
+  var label = 'WANDELROUTE — ' + routed.length + ' STOPS, ONGEVEER 4 UUR';
+  var rbtn = document.getElementById('routeBtn'), rbox = document.getElementById('routeBox');
+  rbtn.textContent = '▸  ' + label;
+  rbtn.addEventListener('click', function(){
+    var open = rbox.classList.toggle('open');
+    document.body.classList.toggle('routemode', open);
+    rbtn.setAttribute('aria-expanded', String(open));
+    rbtn.textContent = (open ? '▾  ' : '▸  ') + label;
+  });
+
+  document.getElementById('toTop').addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+})();
+/* ---------- MinaLima extras: wallpaper, plates, banners, lightbox ---------- */
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* symmetrical damask wallpaper, drawn once as an SVG tile */
+  var tile = '<svg xmlns="http://www.w3.org/2000/svg" width="180" height="240" viewBox="0 0 180 240">'
+    + '<g fill="none" stroke="#a87f2c" stroke-width="1.1" opacity=".30">'
+    + '<path d="M90 18 C64 44 64 72 90 96 C116 72 116 44 90 18z"/>'
+    + '<path d="M90 34 C76 50 76 68 90 82 C104 68 104 50 90 34z"/>'
+    + '<path d="M90 96 v34"/><circle cx="90" cy="138" r="7"/>'
+    + '<path d="M90 145 C64 168 60 200 90 224 C120 200 116 168 90 145z"/>'
+    + '<path d="M52 120 C28 104 20 78 34 56"/><path d="M128 120 C152 104 160 78 146 56"/>'
+    + '<path d="M34 56 q10 10 18 4"/><path d="M146 56 q-10 10 -18 4"/>'
+    + '<path d="M0 138 C22 150 22 178 0 190"/><path d="M180 138 C158 150 158 178 180 190"/>'
+    + '</g>'
+    + '<g fill="#a87f2c" opacity=".22">'
+    + '<circle cx="90" cy="8" r="2.4"/><circle cx="0" cy="128" r="2"/><circle cx="180" cy="128" r="2"/>'
+    + '<circle cx="52" cy="122" r="2"/><circle cx="128" cy="122" r="2"/><circle cx="90" cy="232" r="2.4"/>'
+    + '</g></svg>';
+  var stars = document.getElementById('pxStars');
+  if (stars) stars.style.backgroundImage =
+    'url("data:image/svg+xml;charset=utf8,' + encodeURIComponent(tile) + '")';
+
+  /* photo plates fade + settle when they scroll into view */
+  var plates = Array.prototype.slice.call(document.querySelectorAll('.plate'));
+  if ('IntersectionObserver' in window){
+    var po = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); po.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -8% 0px', threshold:.12});
+    plates.forEach(function(p){ po.observe(p); });
+  } else {
+    plates.forEach(function(p){ p.classList.add('in'); });
+  }
+
+  /* chapter banners drift as you scroll past them */
+  var banners = Array.prototype.slice.call(document.querySelectorAll('.chapter-banner'));
+  var raf = false;
+  function px(){
+    raf = false;
+    var vh = window.innerHeight;
+    banners.forEach(function(b){
+      var r = b.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > vh + 200) return;
+      var img = b.querySelector('img');
+      if (!img) return;
+      var mid = (r.top + r.height/2 - vh/2) / vh;   /* -1 .. 1 */
+      img.style.transform = 'translateY(' + (mid * -26) + 'px)';
+    });
+  }
+  function onScroll(){ if (!raf && !reduce){ raf = true; requestAnimationFrame(px); } }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  px();
+
+  /* lightbox */
+  var lb = document.getElementById('lightbox');
+  var lbImg = lb.querySelector('img');
+  var lbCap = lb.querySelector('.lbcap');
+  function close(){ lb.classList.remove('open'); lbImg.src = ''; document.body.style.overflow = ''; }
+  document.addEventListener('click', function(ev){
+    var a = ev.target.closest ? ev.target.closest('.plate .frame') : null;
+    if (a){
+      ev.preventDefault();
+      lbImg.src = a.dataset.full;
+      lbCap.textContent = a.dataset.cap || '';
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  });
+  lb.addEventListener('click', close);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && lb.classList.contains('open')) close(); });
+})();
+
+/* ---------- plattegrond: onthullen, filteren, doorklikken ---------- */
+(function(){
+  var map = document.getElementById('hpmap');
+  if (!map) return;
+  var marks = Array.prototype.slice.call(map.querySelectorAll('.mk'));
+  map.querySelector('#mroute').setAttribute('stroke-dasharray', '10 11');
+
+  if ('IntersectionObserver' in window){
+    var mo = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ map.classList.add('ready'); mo.disconnect(); } });
+    }, {threshold:.2});
+    mo.observe(map);
+  } else { map.classList.add('ready'); }
+
+  function goto(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (el.classList.contains('hidden')) return;
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.classList.remove('flash');
+    void el.offsetWidth;
+    el.classList.add('flash');
+  }
+  marks.forEach(function(m){
+    m.addEventListener('click', function(){ goto(m.dataset.for); });
+    m.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); goto(m.dataset.for); }
+    });
+  });
+
+  /* volg de labelfilters van de gids */
+  function sync(){
+    marks.forEach(function(m){
+      var el = document.getElementById(m.dataset.for);
+      m.classList.toggle('dim', !!(el && el.classList.contains('hidden')));
+    });
+  }
+  var filters = document.getElementById('filters');
+  if (filters) filters.addEventListener('click', function(){ setTimeout(sync, 0); });
+
+  /* medaillon oplichten als je bij de bijbehorende kaart bent */
+  if ('IntersectionObserver' in window){
+    var eo = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        var m = marks.filter(function(k){ return k.dataset.for === e.target.id; })[0];
+        if (m) m.classList.toggle('on', e.isIntersecting);
+      });
+    }, {rootMargin:'-45% 0px -45% 0px'});
+    marks.forEach(function(m){
+      var el = document.getElementById(m.dataset.for);
+      if (el) eo.observe(el);
+    });
+  }
+})();
+
+/* ======================= TOVEREDITIE: magie ======================= */
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var body = document.body;
+
+  /* ---------- 1. de uil vliegt een boog, en brengt post ---------- */
+  var owl = document.getElementById('owl');
+  var wrap = document.getElementById('hogletWrap');
+  var hogBody = document.getElementById('hogletBody');
+  var flying = null;
+  var LETTERS = [
+    'Nicolson’s Café, één trap omhoog naast Black Medicine: dáár is het echt gebeurd, niet in het beroemdste café van de straat.',
+    'De klok van het Balmoral loopt met opzet drie minuten voor — behalve op oudjaarsavond, als heel Prince’s Street gelijk wil staan.',
+    'Zoek op Greyfriars naar Thomas Riddell, William McGonagall, Elizabeth Moodie en de familie Scrymgeour. Vier namen, één kerkhof.',
+    'George Heriot’s School heeft vier torens en vier huizen die het hele jaar om punten strijden. Kijk vanaf Greyfriars Kirkyard.',
+    'Victoria Street ziet eruit zoals de Wegisweg in ieders hoofd eruitziet: gebogen gevels in zes kleuren, en tovenaarswinkels die er echt zitten.',
+    'Het mooiste van deze stad: alles ligt op loopafstand. Van het café waar het begon naar het kerkhof met de namen is het tien minuten.',
+    'De handafdrukken van Rowling liggen bij de City Chambers, rechtsboven in het eerste vak, links door de doorgang. Gratis, en altijd open.',
+    'De Witches’ Well hangt op ooghoogte aan de muur bij de Esplanade. Bijna iedereen loopt er straal voorbij.'
+  ];
+  function fly(){
+    if (!owl || reduce || document.hidden) return;
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var y0 = vh * (0.10 + Math.random()*0.22);
+    owl.style.top = '0px';
+    owl.style.opacity = '.95';
+    owl.classList.remove('dropped');
+    var dip = 60 + Math.random()*90;
+    flying = owl.animate([
+      {transform:'translate(0px,'+y0+'px) rotate(6deg)'},
+      {transform:'translate('+(vw*0.35)+'px,'+(y0+dip)+'px) rotate(-3deg)', offset:.45},
+      {transform:'translate('+(vw+220)+'px,'+(y0-40)+'px) rotate(5deg)'}
+    ], {duration: 15000, easing:'cubic-bezier(.35,.05,.6,1)'});
+    flying.onfinish = function(){ owl.style.opacity = '0'; flying = null; };
+  }
+  function deliver(){
+    if (!owl) return;
+    owl.classList.add('dropped');
+    hogBody.textContent = LETTERS[Math.floor(Math.random()*LETTERS.length)];
+    wrap.classList.add('open');
+    wrap.setAttribute('aria-hidden','false');
+  }
+  function closeLetter(){
+    wrap.classList.remove('open');
+    wrap.setAttribute('aria-hidden','true');
+  }
+  if (owl){
+    owl.addEventListener('click', deliver);
+    setTimeout(fly, 3200);
+    setInterval(fly, 42000);
+  }
+  document.getElementById('hogletClose').addEventListener('click', closeLetter);
+  wrap.addEventListener('click', function(e){ if (e.target === wrap) closeLetter(); });
+
+  /* ---------- 2. gouden stof achter de aanwijzer ---------- */
+  var cv = document.getElementById('dust'), ctx = cv && cv.getContext('2d');
+  var coarse = window.matchMedia('(hover:none)').matches;
+  var motes = [], mx = 0, my = 0, dustOn = !reduce && !coarse, dustRAF = false;
+  function size(){ if(!cv) return; cv.width = innerWidth; cv.height = innerHeight; }
+  size(); addEventListener('resize', size);
+  addEventListener('pointermove', function(e){
+    mx = e.clientX; my = e.clientY;
+    document.documentElement.style.setProperty('--mx', mx + 'px');
+    document.documentElement.style.setProperty('--my', my + 'px');
+    if (!dustOn || motes.length > 90) return;
+    for (var i = 0; i < 2; i++){
+      motes.push({x:mx + (Math.random()-.5)*10, y:my + (Math.random()-.5)*10,
+        vx:(Math.random()-.5)*.5, vy:.25 + Math.random()*.7,
+        r:.7 + Math.random()*1.9, life:1});
+    }
+    kickDust();
+  }, {passive:true});
+  function dustFrame(){
+    dustRAF = false;
+    if (ctx){
+      ctx.clearRect(0,0,cv.width,cv.height);
+      for (var i = motes.length - 1; i >= 0; i--){
+        var m = motes[i];
+        m.x += m.vx; m.y += m.vy; m.life -= .014; m.vy *= .995;
+        if (m.life <= 0){ motes.splice(i,1); continue; }
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(' + (247 - 40*(1-m.life)) + ',' + (214 - 30*(1-m.life)) + ',120,' + (m.life*.75) + ')';
+        ctx.arc(m.x, m.y, m.r * m.life, 0, 6.284);
+        ctx.fill();
+      }
+    }
+    if (motes.length){ dustRAF = true; requestAnimationFrame(dustFrame); }
+    else if (ctx) ctx.clearRect(0,0,cv.width,cv.height);
+  }
+  function kickDust(){ if (!dustRAF && dustOn){ dustRAF = true; requestAnimationFrame(dustFrame); } }
+
+  /* ---------- 3. sluipwegwijzer: voetsporen over de route ---------- */
+  var map = document.getElementById('hpmap');
+  var route = document.getElementById('mroute');
+  var feet = document.getElementById('mfeet');
+  var maraud = false, walkRAF = null, prints = [], total = 0;
+  function buildPrints(){
+    if (!route || !feet || prints.length) return;
+    total = route.getTotalLength();
+    for (var i = 0; i < 12; i++){
+      var g = document.createElementNS('http://www.w3.org/2000/svg','g');
+      g.innerHTML = '<ellipse rx="3.6" ry="6.2" fill="#2c2114" opacity=".92"/>';
+      feet.appendChild(g);
+      prints.push(g);
+    }
+  }
+  function walk(t){
+    if (!maraud){ walkRAF = null; return; }
+    var head = (t * 0.019) % (total + 620);
+    prints.forEach(function(g, i){
+      var L = head - i * 48;
+      if (L < 0 || L > total){ g.setAttribute('opacity','0'); return; }
+      var p = route.getPointAtLength(L);
+      var q = route.getPointAtLength(Math.min(total, L + 1.2));
+      var a = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI + 90;
+      var side = (i % 2 ? 5.2 : -5.2);
+      var age = 1 - (i / prints.length);
+      g.setAttribute('transform','translate(' + p.x + ',' + p.y + ') rotate(' + a + ') translate(' + side + ',0)');
+      g.setAttribute('opacity', (0.15 + age * 0.75).toFixed(2));
+    });
+    walkRAF = requestAnimationFrame(walk);
+  }
+  var full = document.getElementById('mapFull');
+  var fullBody = full && full.querySelector('.mf-body');
+  var homeFrame = document.querySelector('.mapframe');
+
+  function setMaraud(on){
+    if (!map) return;
+    maraud = on;
+    map.classList.toggle('marauder', on);
+    document.getElementById('maraudOn').hidden = on;
+    document.getElementById('maraudOff').hidden = !on;
+    if (on){
+      buildPrints();
+      map.classList.add('ready');
+      if (!walkRAF) walkRAF = requestAnimationFrame(walk);
+      openFull();
+    } else {
+      closeFull();
+    }
+  }
+
+  /* labels uit elkaar schuiven zodat ze schermvullend leesbaar blijven */
+  var laidOut = false;
+  function layoutLabels(){
+    if (laidOut) return;
+    laidOut = true;
+    var placed = [];
+    Array.prototype.slice.call(map.querySelectorAll('.mk')).forEach(function(mk){
+      var lbl = mk.querySelector('.lbl');
+      var rect = lbl && lbl.querySelector('rect');
+      if (!rect) return;
+      var x = +rect.getAttribute('x'), y = +rect.getAttribute('y');
+      var w = +rect.getAttribute('width'), h = +rect.getAttribute('height');
+      var dy = 0, tries = 0;
+      function clash(){
+        for (var i = 0; i < placed.length; i++){
+          var p = placed[i];
+          if (x < p.x + p.w + 4 && x + w + 4 > p.x &&
+              y + dy < p.y + p.h + 3 && y + dy + h + 3 > p.y) return true;
+        }
+        return false;
+      }
+      while (clash() && tries < 26){
+        tries++;
+        dy = (tries % 2 ? 1 : -1) * Math.ceil(tries / 2) * 17;
+      }
+      if (dy) lbl.setAttribute('transform', 'translate(0,' + dy + ')');
+      placed.push({x:x, y:y + dy, w:w, h:h});
+    });
+  }
+
+  function openFull(){
+    if (!full || full.classList.contains('open')) return;
+    layoutLabels();
+    fullBody.appendChild(map);          /* de echte kaart verhuist mee, inclusief voetstappen */
+    full.classList.add('open');
+    full.setAttribute('aria-hidden','false');
+    document.body.classList.add('mapopen');
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        full.classList.add('rolled');
+        var centre = function(){
+          fullBody.scrollLeft = (fullBody.scrollWidth - fullBody.clientWidth) / 2;
+        };
+        setTimeout(centre, 640); setTimeout(centre, 1100); setTimeout(centre, 1600);
+      });
+    });
+  }
+  function closeFull(){
+    if (!full || !full.classList.contains('open')) return;
+    full.classList.remove('rolled');
+    setTimeout(function(){
+      full.classList.remove('open');
+      full.setAttribute('aria-hidden','true');
+      document.body.classList.remove('mapopen');
+      if (homeFrame && map) homeFrame.appendChild(map);
+    }, 700);
+  }
+  var mOn = document.getElementById('maraudOn'), mOff = document.getElementById('maraudOff');
+  if (mOn) mOn.addEventListener('click', function(){ setMaraud(true); });
+  if (mOff) mOff.addEventListener('click', function(){ setMaraud(false); });
+  var mfC = document.getElementById('mfClose');
+  if (mfC) mfC.addEventListener('click', function(){ setMaraud(false); });
+  addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && full && full.classList.contains('open')) setMaraud(false);
+  });
+
+  /* ---------- 4. patronus ---------- */
+  var pat = document.getElementById('patronus');
+  function patronus(){
+    if (!pat || reduce) return;
+    var vw = innerWidth, vh = innerHeight;
+    pat.style.top = (vh * 0.42) + 'px';
+    pat.style.opacity = '1';
+    pat.animate([
+      {transform:'translate(0,0) scale(.9)', opacity:0},
+      {transform:'translate(' + (vw*0.3) + 'px,-40px) scale(1.05)', opacity:1, offset:.35},
+      {transform:'translate(' + (vw+300) + 'px,-90px) scale(.85)', opacity:0}
+    ], {duration:5200, easing:'cubic-bezier(.3,.1,.5,1)'}).onfinish = function(){ pat.style.opacity = '0'; };
+  }
+
+  /* ---------- 5. spreuken ---------- */
+  var bar = document.getElementById('spellbar');
+  var txt = document.getElementById('spellTxt');
+  var buf = '', hideT = null;
+  function show(cls){
+    bar.className = 'on' + (cls ? ' ' + cls : '');
+    txt.textContent = buf || '…';
+    clearTimeout(hideT);
+    hideT = setTimeout(function(){ bar.className = ''; buf = ''; }, cls ? 2200 : 4000);
+  }
+  function say(msg){ buf = msg; show('ok'); }
+  function nope(){ show('no'); }
+
+  function accio(term){
+    term = term.trim().toLowerCase();
+    if (!term) return false;
+    var hit = null;
+    document.querySelectorAll('.entry').forEach(function(e){
+      if (hit) return;
+      var n = (e.dataset.name || '').toLowerCase();
+      if (n.indexOf(term) !== -1) hit = e;
+    });
+    if (!hit) return false;
+    hit.scrollIntoView({behavior:'smooth', block:'center'});
+    hit.classList.remove('flash'); void hit.offsetWidth; hit.classList.add('flash');
+    return true;
+  }
+
+  var SPELLS = [
+    [/^lumos$/, function(){ body.classList.add('lumos'); say('lumos — licht aan'); }],
+    [/^nox$/, function(){ body.classList.remove('lumos'); say('nox — licht uit'); }],
+    [/^aloho?a?mora$|^alohamora$/, function(){
+      var b = document.getElementById('routeBtn'), box = document.getElementById('routeBox');
+      if (box && !box.classList.contains('open') && b) b.click();
+      if (box) box.scrollIntoView({behavior:'smooth', block:'center'});
+      say('alohomora — de route gaat open');
+    }],
+    [/^accio (.+)$/, function(m){
+      if (accio(m[1])) say('accio ' + m[1]); else nope();
+    }],
+    [/^wingardium leviosa$/, function(){
+      var seen = Array.prototype.slice.call(document.querySelectorAll('.entry.in')).slice(0, 14);
+      seen.forEach(function(e, i){
+        setTimeout(function(){
+          e.classList.remove('levitate'); void e.offsetWidth; e.classList.add('levitate');
+        }, i * 90);
+      });
+      say('wingardium leviosa');
+    }],
+    [/^expecto patronum$/, function(){ patronus(); say('expecto patronum'); }],
+    [/^revelio$/, function(){
+      document.querySelectorAll('#hpmap .mk').forEach(function(m){ m.classList.toggle('on'); });
+      say('revelio — alle namen op de kaart');
+    }],
+    [/^i solemnly swear that i am up to no good$|^ik zweer plechtig dat ik snode plannen heb$/, function(){ setMaraud(true); say('mischief in aantocht…'); }],
+    [/^mischief managed!?$|^onheil beraamd!?$/, function(){ setMaraud(false); say('mischief managed'); }],
+    [/^hedwig$/, function(){ fly(); say('hedwig is onderweg'); }]
+  ];
+
+  addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+    if (e.key === 'Escape'){
+      if (wrap.classList.contains('open')) { closeLetter(); return; }
+      buf = ''; bar.className = ''; body.classList.remove('lumos'); return;
+    }
+    if (e.key === 'Backspace'){ buf = buf.slice(0, -1); show(); e.preventDefault(); return; }
+    if (e.key === 'Enter'){
+      var v = buf.trim().toLowerCase();
+      for (var i = 0; i < SPELLS.length; i++){
+        var m = v.match(SPELLS[i][0]);
+        if (m){ SPELLS[i][1](m); return; }
+      }
+      if (v) nope();
+      return;
+    }
+    if (e.key.length !== 1) return;
+    if (!/[a-zA-Z !']/.test(e.key)) return;
+    buf += e.key;
+    show();
+    /* spreuken die zichzelf herkennen, ook zonder Enter */
+    var v2 = buf.trim().toLowerCase();
+    for (var j = 0; j < SPELLS.length; j++){
+      var mm = v2.match(SPELLS[j][0]);
+      if (mm && SPELLS[j][0].source.indexOf('(.+)') === -1){ SPELLS[j][1](mm); return; }
+    }
+  });
+})();
+
+/* ---------- spreukenmenu: werkt ook zonder toetsenbord ---------- */
+(function(){
+  var btn = document.getElementById('wandBtn');
+  var menu = document.getElementById('wandMenu');
+  if (!btn || !menu) return;
+  function open(v){
+    menu.hidden = !v;
+    btn.setAttribute('aria-expanded', v ? 'true' : 'false');
+  }
+  btn.addEventListener('click', function(){ open(menu.hidden); });
+  document.addEventListener('click', function(e){
+    if (!menu.hidden && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) open(false);
+  });
+  function key(k){ document.dispatchEvent(new KeyboardEvent('keydown', {key:k, bubbles:true})); }
+  menu.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-spell]');
+    if (!b) return;
+    key('Escape');
+    var sp = b.dataset.spell;
+    for (var i = 0; i < sp.length; i++) key(sp[i]);
+    if (b.dataset.enter) key('Enter');
+    open(false);
+  });
+})();
+
+</script>
+</body>
+</html>
